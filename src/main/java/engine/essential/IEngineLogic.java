@@ -19,4 +19,6 @@ public interface IEngineLogic {
 
     void render(Window window);
 
+    default void cleanup() { };
+
 }

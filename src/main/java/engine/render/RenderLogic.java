@@ -2,8 +2,14 @@ package engine.render;
 
 import engine.essential.IEngineLogic;
 import engine.essential.Window;
+import org.lwjgl.BufferUtils;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.ARBVertexArrayObject.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -66,11 +72,13 @@ public class RenderLogic implements IEngineLogic {
     }
 
     public void render(Window window) {
-        glColor3f(0.8f, 0.8f, 0);
-        glRectf(xpos, ypos, xpos+50, ypos+50);
         window.setClearColor(color, color, color, 0.0f);
-        renderer.clear();
+        renderer.render();
 
 
+    }
+
+    public void cleanup(){
+        renderer.cleanup();
     }
 }

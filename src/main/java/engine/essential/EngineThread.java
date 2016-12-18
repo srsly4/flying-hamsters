@@ -40,6 +40,7 @@ public class EngineThread implements Runnable {
         try {
             init();
             loop();
+            logic.cleanup();
         }
         catch (Exception e)
         {
