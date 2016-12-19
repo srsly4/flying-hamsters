@@ -2,6 +2,7 @@ package engine.render;
 
 import engine.GLException;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -43,7 +44,8 @@ public class ShaderProgram {
         glShaderSource(shid, name);
         glCompileShader(shid);
 
-        if (glGetShaderi(shid, GL_COMPILE_STATUS) == 0) throw new GLException("Error while compiling shader", "glCompileShader");
+        if (glGetShaderi(shid, GL_COMPILE_STATUS) == 0) throw new GLException("Error while compiling shader - " +
+                glGetShaderInfoLog(programId), "glCompileShader");
 
         glAttachShader(programId, shid);
         return shid;
@@ -90,6 +92,12 @@ public class ShaderProgram {
         FloatBuffer buff = BufferUtils.createFloatBuffer(16);
         mat.get(buff);
         glUniformMatrix4fv(uniforms.get(name), false, buff);
+    }
+
+    public void setUniform(String name, Vector2f vec){
+        FloatBuffer buff = BufferUtils.createFloatBuffer(2);
+        vec.get(buff);
+        glUniform2fv(uniforms.get(name), buff);
     }
 
     public void setUniform(String name, int val){

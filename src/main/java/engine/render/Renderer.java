@@ -6,6 +6,7 @@ import engine.Transformation;
 import engine.Utils;
 import engine.essential.Window;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 
@@ -33,6 +34,7 @@ public class Renderer {
         GL.createCapabilities();
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         sProgram.createVertexShader(Utils.loadResource("/vertex.glsl"));
         sProgram.createFragmentShader(Utils.loadResource("/simple_color.glsl"));
         sProgram.link();
@@ -40,9 +42,10 @@ public class Renderer {
         sProgram.createUniform("projectionMatrix");
         sProgram.createUniform("worldMatrix");
         sProgram.createUniform("texture_sampler");
+        sProgram.createUniform("texturePosition");
     }
 
-    public void render(RenderItem[] items, Window window)
+    public void render(IRenderable[] items, Window window)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -50,14 +53,15 @@ public class Renderer {
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(window.getWidth(), window.getHeight());
         sProgram.setUniform("projectionMatrix", projectionMatrix);
         sProgram.setUniform("texture_sampler", 0);
-        for (RenderItem item : items)
+        for (IRenderable item : items)
         {
+            sProgram.setUniform("texturePosition", item.getTextureOrigin());
             Matrix4f worldMatrix = transformation.getWorldMatrix(
                     item.getPosition(),
                     item.getRotation(),
                     item.getScale());
             sProgram.setUniform("worldMatrix", worldMatrix);
-            item.getVertexBuffer().render();
+            item.render();
         }
         sProgram.unbind();
     }

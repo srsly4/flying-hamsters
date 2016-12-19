@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args){
         System.out.println("Joł!");
         try {
-            IEngineLogic logic = new RenderLogic();
+            GameLogic logic = new GameLogic();
             EngineThread engine = new EngineThread("Test game", 1280, 720, false, logic);
             engine.start();
         }

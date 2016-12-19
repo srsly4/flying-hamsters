@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/grass.png</texture>
+    <width>1.0</width>
+    <height>0.1652</height>
+    <textureWidth>1024</textureWidth>
+    <textureHeight>256</textureHeight>
+    <textureRepeatX>2</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+</sprite>

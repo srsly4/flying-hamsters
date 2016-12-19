@@ -8,14 +8,14 @@ import java.util.*;
  */
 public class Utils {
 
-    public static String loadResource(String name) throws EngineException{
+    public static String loadResource(String name) throws EngineResourceException{
         String result;
         try (InputStream in = Utils.class.getClass().getResourceAsStream(name);
              Scanner scanner = new Scanner(in, "UTF-8")) {
             result = scanner.useDelimiter("\\A").next();
         }
-        catch (IOException e) {
-            EngineException ex = new EngineException("Could not load requested resource: " + name);
+        catch (IOException|NullPointerException e) {
+            EngineResourceException ex = new EngineResourceException("Could not load requested resource: " + name);
             ex.initCause(e);
             throw ex;
         }
