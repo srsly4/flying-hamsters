@@ -31,23 +31,31 @@ public class RenderLogic implements IEngineLogic {
         renderer = new Renderer();
         renderer.init(window);
 
+        Texture tex = new Texture("/textures/hamster.png");
+
         float[] positions = new float[]{
-                -0.25f,  0.25f,  0,
-                -0.25f, -0.25f,  0,
-                0.25f, -0.25f,  0
+                -1f,  1f,  0,
+                -1f, -1f,  0,
+                1f, -1f,  0,
+                -1f, 1f, 0,
+                1f, 1f, 0,
+                1f, -1f, 0
+
         };
-        VertexBuffer vbuff = new VertexBuffer(positions);
+        float[] texCoords = new float[]{
+                0, 0,
+                0, 1f,
+                1f, 1f,
+                0f, 0f,
+                1f, 0f,
+                1f, 1f
+        };
+        VertexBuffer vbuff = new VertexBuffer(positions, texCoords, tex);
         item = new RenderItem(vbuff);
         item.setPosition(-0.2f, 0.02f);
-        item.setScale(1f);
-        item.setRotation(45);
+        item.setScale(0.5f);
 
-        RenderItem item2 = new RenderItem(vbuff);
-        item2.setPosition(-0.75f, 0.5f);
-        item2.setScale(0.5f);
-        item2.setRotation(90f);
-
-        renderItems = new RenderItem[]{item, item2};
+        renderItems = new RenderItem[]{item};
     }
 
     private final Vector3f rMove = new Vector3f(0.01f, 0, 0);

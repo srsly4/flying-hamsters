@@ -12,7 +12,7 @@ public class Main {
         System.out.println("Joł!");
         try {
             IEngineLogic logic = new RenderLogic();
-            EngineThread engine = new EngineThread("Test game", 640, 360, false, logic);
+            EngineThread engine = new EngineThread("Test game", 1280, 720, false, logic);
             engine.start();
         }
         catch (Exception e){

@@ -31,12 +31,15 @@ public class Renderer {
 
     public void init(Window window) throws Exception {
         GL.createCapabilities();
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         sProgram.createVertexShader(Utils.loadResource("/vertex.glsl"));
         sProgram.createFragmentShader(Utils.loadResource("/simple_color.glsl"));
         sProgram.link();
 
         sProgram.createUniform("projectionMatrix");
         sProgram.createUniform("worldMatrix");
+        sProgram.createUniform("texture_sampler");
     }
 
     public void render(RenderItem[] items, Window window)
@@ -46,6 +49,7 @@ public class Renderer {
         sProgram.bind();
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(window.getWidth(), window.getHeight());
         sProgram.setUniform("projectionMatrix", projectionMatrix);
+        sProgram.setUniform("texture_sampler", 0);
         for (RenderItem item : items)
         {
             Matrix4f worldMatrix = transformation.getWorldMatrix(
@@ -59,8 +63,6 @@ public class Renderer {
     }
 
     public void cleanup(){
-        if (sProgram != null) {
-            sProgram.cleanup();
-        }
+        sProgram.cleanup();
     }
 }
