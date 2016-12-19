@@ -6,6 +6,8 @@ import engine.render.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
  */
@@ -14,9 +16,9 @@ public class GameLogic implements IEngineLogic {
     private Renderer renderer;
     private IRenderable[] items;
     private IGameObject[] gameObjects;
-    StaticSprite hamster;
 
     private World world;
+    private Hamster hamster;
 
     public GameLogic() throws Exception{
     }
@@ -29,21 +31,33 @@ public class GameLogic implements IEngineLogic {
         window.setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         ArrayList<IRenderable> rlist = new ArrayList<>();
-        hamster = new StaticSprite("/sprites/hamster.xml");
-        hamster.setPosition(-1f, 0f);
-        hamster.setRotation(30f);
-        rlist.add(hamster);
 
         world = new World();
-        rlist.addAll(world.getRenderables());
+        hamster = new Hamster();
+
+
+        gameObjects = new IGameObject[]{world, hamster};
+
+        //create renderables list
+        for (IGameObject obj : gameObjects)
+            rlist.addAll(obj.getRenderables());
+
+        //add markers
+//        for (float i = -1f; i <= 1f; i += 0.25f)
+//            for (float j = -0.5625f; j <= +0.5625f; j += 0.125f)
+//            {
+//                StaticSprite marker = new StaticSprite("/sprites/marker.xml");
+//                marker.setPosition(i, j);
+//                rlist.add(marker);
+//            }
+
 
         items = rlist.toArray(new IRenderable[]{});
-        gameObjects = new IGameObject[]{world};
     }
 
     @Override
     public void input(Window window) {
-
+        hamster.setFly(window.isKeyPressed(GLFW_KEY_SPACE));
     }
 
     @Override

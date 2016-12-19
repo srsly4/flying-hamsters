@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.*;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.Vector;
 
 import static org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray;
 import static org.lwjgl.opengl.GL11.*;
@@ -141,6 +142,10 @@ public class StaticSprite implements IRenderable {
     public void setPosition(float x, float y){
         this.position.x = x;
         this.position.y = y;
+    }
+    public void setPosition(Vector2f v){
+        this.position.x = v.x;
+        this.position.y = v.y;
     }
     public float getScale() {
         return scale;
