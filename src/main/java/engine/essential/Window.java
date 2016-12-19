@@ -71,6 +71,10 @@ public class Window extends TimeManager {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        //antialiasing
+        glfwWindowHint(GLFW_STENCIL_BITS, 4);
+        glfwWindowHint(GLFW_SAMPLES, 4);
+
 
         handle = glfwCreateWindow(width, height, title, NULL, NULL);
         if (handle == NULL) {
@@ -98,6 +102,7 @@ public class Window extends TimeManager {
 
         if (isVsync())
             glfwSwapInterval(1);
+
 
         glfwShowWindow(handle);
         GL.createCapabilities();

@@ -80,7 +80,7 @@ public class EngineThread implements Runnable {
     protected void init() throws Exception {
         window.init();
         timeManager.init();
-        logic.init();
+        logic.init(window);
     }
 
     protected void input(){

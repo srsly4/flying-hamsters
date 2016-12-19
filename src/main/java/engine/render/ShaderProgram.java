@@ -1,6 +1,11 @@
 package engine.render;
 
 import engine.GLException;
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
+
+import java.nio.FloatBuffer;
+import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -12,12 +17,15 @@ public class ShaderProgram {
     private final int programId;
     private int vertexShaderId;
     private int fragmentShaderId;
+    private HashMap<String, Integer> uniforms;
+
 
     public ShaderProgram() throws GLException {
         programId = glCreateProgram();
         if (programId == 0) {
             throw new GLException("Could not create Shader", "glCreateProgram");
         }
+        uniforms = new HashMap<>();
     }
 
     public int createVertexShader(String name) throws GLException {
@@ -70,6 +78,18 @@ public class ShaderProgram {
             }
             glDeleteProgram(programId);
         }
+    }
+
+    public void createUniform(String name) throws GLException {
+        int location = glGetUniformLocation(programId, name);
+        if (location < 0) throw new GLException("Could not locate Shader's uniform '" + name + "'", "glGetUniformLocation");
+        uniforms.put(name, location);
+    }
+
+    public void setUniform(String name, Matrix4f mat){
+        FloatBuffer buff = BufferUtils.createFloatBuffer(16);
+        mat.get(buff);
+        glUniformMatrix4fv(uniforms.get(name), false, buff);
     }
 
 }

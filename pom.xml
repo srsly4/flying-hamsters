@@ -23,7 +23,11 @@
             <artifactId>lwjgl-opengl</artifactId>
             <version>3.1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.joml</groupId>
+            <artifactId>joml</artifactId>
+            <version>1.9.0</version>
+        </dependency>
         <!-- Natives -->
         <dependency>
             <groupId>org.lwjgl</groupId>

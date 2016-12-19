@@ -7,7 +7,7 @@ public interface IEngineLogic {
     /**
      * @throws Exception
      */
-    void init() throws Exception;
+    void init(Window window) throws Exception;
 
     /**
      * Should be implemented with input controll functions
