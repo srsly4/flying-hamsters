@@ -35,6 +35,7 @@ public class StaticSprite implements IRenderable {
     private final Vector2f textureOrigin;
     private float spriteWidth;
     private float spriteHeight;
+    private boolean visibility = true;
 
     private Texture texture;
     private int vaoId;
@@ -160,6 +161,16 @@ public class StaticSprite implements IRenderable {
     public Vector2f getTextureOrigin(){
         return textureOrigin;
     }
+
+    @Override
+    public boolean isVisible() {
+        return visibility;
+    }
+
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
+    }
+
     public void setTextureOrigin(float x, float y){
         this.textureOrigin.x = x;
         this.textureOrigin.y = y;

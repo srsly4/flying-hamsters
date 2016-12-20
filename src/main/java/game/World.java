@@ -18,9 +18,12 @@ public class World implements IGameObject {
     private float xPos = 0;
     private float grassXPos = 0;
 
+    public final StaticSprite background;
     public final StaticSprite grass;
 
     public World() throws EngineException {
+        background = new StaticSprite("/sprites/background.xml");
+
         grass = new StaticSprite("/sprites/grass.xml");
         grass.setPosition(0, -0.5f);
     }
@@ -36,6 +39,7 @@ public class World implements IGameObject {
     @Override
     public ArrayList<IRenderable> getRenderables() {
         ArrayList<IRenderable> rlist = new ArrayList<>();
+        rlist.add(background);
         rlist.add(grass);
         return rlist;
     }

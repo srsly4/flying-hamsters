@@ -55,6 +55,7 @@ public class Renderer {
         sProgram.setUniform("texture_sampler", 0);
         for (IRenderable item : items)
         {
+            if(!item.isVisible()) continue;
             sProgram.setUniform("texturePosition", item.getTextureOrigin());
             Matrix4f worldMatrix = transformation.getWorldMatrix(
                     item.getPosition(),

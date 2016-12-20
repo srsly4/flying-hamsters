@@ -1,5 +1,7 @@
 package game;
 
+import engine.Event;
+import engine.EventManager;
 import engine.essential.*;
 import engine.render.*;
 
@@ -53,6 +55,18 @@ public class GameLogic implements IEngineLogic {
 
 
         items = rlist.toArray(new IRenderable[]{});
+
+
+        //logic initialize
+        EventManager ev = EventManager.getInstance();
+        ev.addEvent(new Event(2f, () -> {
+            hamster.setInAir(true);
+            return null;
+        }));
+        ev.addEvent(new Event(2.5f, () -> {
+            hamster.setVelXY(150f, 10f);
+            return null;
+        }));
     }
 
     @Override

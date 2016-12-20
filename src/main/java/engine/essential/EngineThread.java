@@ -1,5 +1,8 @@
 package engine.essential;
 
+import engine.EngineException;
+import engine.EventManager;
+
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 
 /**
@@ -49,7 +52,7 @@ public class EngineThread implements Runnable {
         }
     }
 
-    protected void loop(){
+    protected void loop() throws EngineException{
         float delta;
         float update_int = 1.0f / DESIRED_UPS;
         float update_acc = 0.0f;
@@ -80,6 +83,7 @@ public class EngineThread implements Runnable {
     protected void init() throws Exception {
         window.init();
         timeManager.init();
+        EventManager.initializeInstance(timeManager);
         logic.init(window);
     }
 
@@ -87,7 +91,8 @@ public class EngineThread implements Runnable {
         logic.input(window); //pass the input logic to actually logic class
     }
 
-    protected void update(float interval){
+    protected void update(float interval) throws EngineException{
+        EventManager.getInstance().update();
         logic.update(interval); //pass the update logic to actually logic class
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/background.png</texture>
+    <textureWidth>2048</textureWidth>
+    <textureHeight>1152</textureHeight>
+    <textureRepeatX>1</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+    <width>1.0</width>
+    <height>0.5625</height>
+</sprite>

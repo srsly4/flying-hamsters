@@ -13,4 +13,5 @@ public interface IRenderable {
     Vector3f getRotation();
     float getScale();
     Vector2f getTextureOrigin();
+    boolean isVisible();
 }
