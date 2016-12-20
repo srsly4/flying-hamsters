@@ -35,7 +35,7 @@ public class GameLogic implements IEngineLogic {
         ArrayList<IRenderable> rlist = new ArrayList<>();
 
         world = new World();
-        hamster = new Hamster();
+        hamster = new Hamster(world);
 
 
         gameObjects = new IGameObject[]{world, hamster};
@@ -59,12 +59,9 @@ public class GameLogic implements IEngineLogic {
 
         //logic initialize
         EventManager ev = EventManager.getInstance();
-        ev.addEvent(new Event(2f, () -> {
+        ev.addEvent(new Event(0.5f, () -> {
             hamster.setInAir(true);
-            return null;
-        }));
-        ev.addEvent(new Event(2.5f, () -> {
-            hamster.setVelXY(150f, 10f);
+            hamster.setVelXY(900f, 10f);
             return null;
         }));
     }
@@ -76,6 +73,8 @@ public class GameLogic implements IEngineLogic {
 
     @Override
     public void update(float interval) {
+        world.setXPos(hamster.getxPos());
+
         for (IGameObject obj : gameObjects)
             obj.update(interval);
     }

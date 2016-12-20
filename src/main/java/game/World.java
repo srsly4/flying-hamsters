@@ -16,6 +16,7 @@ public class World implements IGameObject {
     public final static float cameraHeight = 900f;
 
     private float xPos = 0;
+    private float yPos = 0; //from bottom;
     private float grassXPos = 0;
 
     public final StaticSprite background;
@@ -25,15 +26,26 @@ public class World implements IGameObject {
         background = new StaticSprite("/sprites/background.xml");
 
         grass = new StaticSprite("/sprites/grass.xml");
-        grass.setPosition(0, -0.5f);
+        grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
+    }
+
+    public void setXPos(float x){
+        this.xPos = x;
+    }
+
+    public void setYPos(float y){
+        this.yPos = y;
     }
 
     @Override
     public void update(float interval) {
-        grassXPos += 0.5f*interval;
-        if (grassXPos > 1f)
+        grassXPos = xPos/World.cameraWidth;
+        while (grassXPos > 1f)
             grassXPos -= 1f;
         grass.setTextureOrigin(grassXPos, 0);
+
+        //vertical position
+        grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f - yPos));
     }
 
     @Override
