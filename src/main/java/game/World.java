@@ -20,10 +20,13 @@ public class World implements IGameObject {
     private float grassXPos = 0;
 
     public final StaticSprite background;
+    public final StaticSprite movingBackground;
     public final StaticSprite grass;
 
     public World() throws EngineException {
         background = new StaticSprite("/sprites/background.xml");
+        movingBackground = new StaticSprite("/sprites/mov_background.xml");
+        movingBackground.setPosition(0, -0.5f+movingBackground.getSpriteHeight());
 
         grass = new StaticSprite("/sprites/grass.xml");
         grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
@@ -45,13 +48,22 @@ public class World implements IGameObject {
         grass.setTextureOrigin(grassXPos, 0);
 
         //vertical position
-        grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f - yPos));
+        if (yPos > 0.75f*World.cameraHeight)
+        {
+            grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f - yPos + 0.75f*World.cameraHeight));
+        }
+        else
+            grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
+
+        movingBackground.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f,
+                200f-(yPos/20.0f)));
     }
 
     @Override
     public ArrayList<IRenderable> getRenderables() {
         ArrayList<IRenderable> rlist = new ArrayList<>();
         rlist.add(background);
+        rlist.add(movingBackground);
         rlist.add(grass);
         return rlist;
     }

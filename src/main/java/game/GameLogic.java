@@ -59,9 +59,9 @@ public class GameLogic implements IEngineLogic {
 
         //logic initialize
         EventManager ev = EventManager.getInstance();
-        ev.addEvent(new Event(0.5f, () -> {
+        ev.addEvent(new Event(2f, () -> {
             hamster.setInAir(true);
-            hamster.setVelXY(900f, 10f);
+            hamster.setVelXY(9000f, 10f);
             return null;
         }));
     }

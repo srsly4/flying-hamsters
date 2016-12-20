@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/mov_background.png</texture>
+    <textureWidth>2048</textureWidth>
+    <textureHeight>317</textureHeight>
+    <textureRepeatX>1</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+    <width>1.0</width>
+    <height>0.22015</height>
+</sprite>

@@ -76,7 +76,6 @@ public class Hamster implements IGameObject {
             if (yPos < 0.75f*World.cameraHeight){
                 realYPos = yPos;
                 highestCameraY = yPos;
-                world.setYPos(0);
             }
             else {
                 highestCameraY = Math.max(highestCameraY, yPos);
@@ -98,9 +97,9 @@ public class Hamster implements IGameObject {
                     }
 
                 }
-                world.setYPos(yPos - 0.75f*World.cameraHeight);
             }
 
+            world.setYPos(yPos);
             sprite.setRotation((float)Math.toDegrees(Math.atan2(yVel, 2*xVel)));
             sprite.setPosition(World.worldCoordsToRender(realXPos, realYPos));
         }
