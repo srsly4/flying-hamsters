@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/shadow.png</texture>
+    <width>0.075</width>
+    <height>0.075</height>
+    <textureWidth>64</textureWidth>
+    <textureHeight>64</textureHeight>
+    <textureRepeatX>1</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+</sprite>

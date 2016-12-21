@@ -23,10 +23,17 @@ public class Hamster implements IGameObject {
     private final World world;
 
 
+    public static final float groundPos = 100f;
+    public static float maxYVel = 500f;
     public Hamster(World world) throws EngineException {
         sprite = new StaticSprite("/sprites/hamster.xml");
         sprite.setVisibility(false);
         this.world = world;
+    }
+
+    public void setPosition(float x, float y){
+        this.xPos = x;
+        this.yPos = y;
     }
 
     public void setFly(boolean fly)
@@ -64,43 +71,47 @@ public class Hamster implements IGameObject {
             else
                 xVel -= interval*0.001*(xVel*xVel);
 
+            yVel = Math.min(yVel, maxYVel);
+
             yPos += 10*yVel*interval;
             xPos += 10*xVel*interval;
-            if (yPos <= 50f)
+            if (yPos <= groundPos)
             {
-                yPos = 50f;
+                yPos = groundPos;
                 yVel = 0;
                 xVel = 0;
             }
 
-            if (yPos < 0.75f*World.cameraHeight){
+            if (yPos < 0.5f*World.cameraHeight){
                 realYPos = yPos;
                 highestCameraY = yPos;
             }
             else {
-                highestCameraY = Math.max(highestCameraY, yPos);
-                float delta = highestCameraY-yPos;
-                if (delta > 0.5f*World.cameraHeight)
-                    highestCameraY -= delta - 0.5f*World.cameraHeight;
-                realYPos = 0.75f*World.cameraHeight-delta;
-//                realYPos = 0.75f*World.cameraHeight;
+                realYPos = 0.5f*World.cameraHeight;
 
-                //falling down
-                if (yPos < 1.25f*World.cameraHeight) // 0.75 < yPos < 1.25
-                {
-                    if (highestCameraY - yPos >= 0.5f*World.cameraHeight) //we're falling from far top
-                    {
-                        realYPos += (1.25f*World.cameraHeight-yPos);
-                    }
-                    else {
-                        realYPos = 0.75f*World.cameraHeight;
-                    }
-
-                }
+//                highestCameraY = Math.max(highestCameraY, yPos);
+//                float delta = highestCameraY-yPos;
+//                if (delta > 0.5f*World.cameraHeight)
+//                    highestCameraY -= delta - 0.5f*World.cameraHeight;
+//                realYPos = 0.75f*World.cameraHeight-delta;
+////                realYPos = 0.75f*World.cameraHeight;
+//
+//                //falling down
+//                if (yPos < 1.25f*World.cameraHeight) // 0.75 < yPos < 1.25
+//                {
+//                    if (highestCameraY - yPos >= 0.5f*World.cameraHeight) //we're falling from far top
+//                    {
+//                        realYPos += (1.25f*World.cameraHeight-yPos);
+//                    }
+//                    else {
+//                        realYPos = 0.75f*World.cameraHeight;
+//                    }
+//
+//                }
             }
 
             world.setYPos(yPos);
-            sprite.setRotation((float)Math.toDegrees(Math.atan2(yVel, 2*xVel)));
+            sprite.setRotation((float)Math.toDegrees(Math.atan2(yVel, xVel)));
             sprite.setPosition(World.worldCoordsToRender(realXPos, realYPos));
         }
 

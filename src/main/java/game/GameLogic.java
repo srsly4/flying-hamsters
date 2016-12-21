@@ -21,6 +21,7 @@ public class GameLogic implements IEngineLogic {
 
     private World world;
     private Hamster hamster;
+    private HamsterShadow hamsterShadow;
 
     public GameLogic() throws Exception{
     }
@@ -30,15 +31,16 @@ public class GameLogic implements IEngineLogic {
         renderer = new Renderer();
         renderer.init(window);
 
-        window.setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        window.setClearColor(0.84f, 0.59f, 0.22f, 1.0f);
 
         ArrayList<IRenderable> rlist = new ArrayList<>();
 
         world = new World();
         hamster = new Hamster(world);
+        hamsterShadow = new HamsterShadow(world, hamster);
 
 
-        gameObjects = new IGameObject[]{world, hamster};
+        gameObjects = new IGameObject[]{world, hamsterShadow, hamster};
 
         //create renderables list
         for (IGameObject obj : gameObjects)
@@ -60,8 +62,9 @@ public class GameLogic implements IEngineLogic {
         //logic initialize
         EventManager ev = EventManager.getInstance();
         ev.addEvent(new Event(2f, () -> {
+            hamster.setPosition(50f, 400f);
             hamster.setInAir(true);
-            hamster.setVelXY(9000f, 10f);
+            hamster.setVelXY(2000f, 200f);
             return null;
         }));
     }

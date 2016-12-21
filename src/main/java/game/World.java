@@ -6,7 +6,6 @@ import engine.render.StaticSprite;
 import org.joml.Vector2f;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
@@ -18,17 +17,18 @@ public class World implements IGameObject {
     private float xPos = 0;
     private float yPos = 0; //from bottom;
     private float grassXPos = 0;
+    private float backgroundXPos = 0;
 
     public final StaticSprite background;
-    public final StaticSprite movingBackground;
+//    public final StaticSprite movingBackground;
     public final StaticSprite grass;
 
     public World() throws EngineException {
         background = new StaticSprite("/sprites/background.xml");
-        movingBackground = new StaticSprite("/sprites/mov_background.xml");
-        movingBackground.setPosition(0, -0.5f+movingBackground.getSpriteHeight());
+//        movingBackground = new StaticSprite("/sprites/mov_background.xml");
+//        movingBackground.setPosition(0, -0.5f+movingBackground.getSpriteHeight());
 
-        grass = new StaticSprite("/sprites/grass.xml");
+        grass = new StaticSprite("/sprites/ground.xml");
         grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
     }
 
@@ -42,28 +42,36 @@ public class World implements IGameObject {
 
     @Override
     public void update(float interval) {
-        grassXPos = xPos/World.cameraWidth;
+        grassXPos = (xPos/World.cameraWidth);
+        backgroundXPos = grassXPos*0.05f;
         while (grassXPos > 1f)
             grassXPos -= 1f;
+        while (backgroundXPos > 1f)
+            backgroundXPos -= 1f;
         grass.setTextureOrigin(grassXPos, 0);
+        background.setTextureOrigin(backgroundXPos, 0);
 
-        //vertical position
-        if (yPos > 0.75f*World.cameraHeight)
+        //vertical grass positioning
+        if (yPos > 0.5f*World.cameraHeight)
         {
-            grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f - yPos + 0.75f*World.cameraHeight));
+            grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f - yPos + 0.5f*World.cameraHeight));
         }
         else
+        {
             grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
+        }
 
-        movingBackground.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f,
-                200f-(yPos/20.0f)));
+
+//        movingBackground.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f,
+//                200f-(yPos/20.0f)));
+        background.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f,
+                Math.min(((World.cameraHeight/2.0f)-0.25f*(yPos-0.5f*World.cameraHeight)), 0.5f*World.cameraHeight)));
     }
 
     @Override
     public ArrayList<IRenderable> getRenderables() {
         ArrayList<IRenderable> rlist = new ArrayList<>();
         rlist.add(background);
-        rlist.add(movingBackground);
         rlist.add(grass);
         return rlist;
     }

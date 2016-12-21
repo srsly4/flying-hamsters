@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <sprite>
     <texture>/textures/hamster.png</texture>
-    <width>0.1</width>
-    <height>0.0616</height>
+    <width>0.075</width>
+    <height>0.0462</height>
     <textureWidth>256</textureWidth>
     <textureHeight>158</textureHeight>
     <textureRepeatX>1</textureRepeatX>
