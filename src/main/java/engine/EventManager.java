@@ -28,6 +28,7 @@ public class EventManager {
                 {
                     events.poll();
                     ev.execute();
+
                 }
                 else break;
             }

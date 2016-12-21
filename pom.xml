@@ -33,6 +33,16 @@
             <artifactId>pngdecoder</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-stb</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>LATEST</version>
+        </dependency>
         <!-- Natives -->
         <dependency>
             <groupId>org.lwjgl</groupId>
