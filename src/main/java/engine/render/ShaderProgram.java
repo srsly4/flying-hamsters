@@ -45,7 +45,7 @@ public class ShaderProgram {
         glCompileShader(shid);
 
         if (glGetShaderi(shid, GL_COMPILE_STATUS) == 0) throw new GLException("Error while compiling shader - " +
-                glGetShaderInfoLog(programId), "glCompileShader");
+                glGetShaderInfoLog(shid), "glCompileShader");
 
         glAttachShader(programId, shid);
         return shid;

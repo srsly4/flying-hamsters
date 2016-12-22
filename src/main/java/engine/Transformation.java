@@ -20,7 +20,8 @@ public class Transformation {
     public final Matrix4f getProjectionMatrix(float width, float height) {
         float aspectRatio = width / height;
         projectionMatrix.identity();
-        projectionMatrix.ortho(-1.0f, 1.0f, -1.0f / aspectRatio, 1.0f / aspectRatio, -1.0f, 1.0f);
+        projectionMatrix.setOrtho2D(-1.0f, 1.0f, -1.0f / aspectRatio, 1.0f / aspectRatio);
+//        projectionMatrix.ortho(-1.0f, 1.0f, -1.0f / aspectRatio, 1.0f / aspectRatio, -1.0f, 1.0f);
         return projectionMatrix;
     }
 

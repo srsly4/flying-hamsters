@@ -4,6 +4,7 @@ import engine.Event;
 import engine.EventManager;
 import engine.essential.*;
 import engine.render.*;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,6 +23,8 @@ public class GameLogic implements IEngineLogic {
     private World world;
     private Hamster hamster;
     private HamsterShadow hamsterShadow;
+    private TextSprite xPosLabel;
+    private FontBuffer hamsterFont;
 
     public GameLogic() throws Exception{
     }
@@ -39,13 +42,16 @@ public class GameLogic implements IEngineLogic {
         hamster = new Hamster(world);
         hamsterShadow = new HamsterShadow(world, hamster);
 
+        hamsterFont = new FontBuffer("/fonts/RifficFree-Bold.ttf", 48, new Vector3f(1f, 1f, 1f));
+        xPosLabel = new TextSprite(hamsterFont);
+        xPosLabel.setText("xPos: ");
+        xPosLabel.setPosition(-1f, 0.5625f);
 
         gameObjects = new IGameObject[]{world, hamsterShadow, hamster};
-
         //create renderables list
         for (IGameObject obj : gameObjects)
             rlist.addAll(obj.getRenderables());
-
+        rlist.add(xPosLabel);
         //add markers
 //        for (float i = -1f; i <= 1f; i += 0.25f)
 //            for (float j = -0.5625f; j <= +0.5625f; j += 0.125f)
@@ -64,7 +70,7 @@ public class GameLogic implements IEngineLogic {
         ev.addEvent(new Event(2f, () -> {
             hamster.setPosition(50f, 400f);
             hamster.setInAir(true);
-            hamster.setVelXY(2000f, 200f);
+            hamster.setVelXY(500f, 200f);
             return null;
         }));
     }
@@ -77,7 +83,7 @@ public class GameLogic implements IEngineLogic {
     @Override
     public void update(float interval) {
         world.setXPos(hamster.getxPos());
-
+        xPosLabel.setText(String.format("x: %.0f, y: %.0f", hamster.getxPos(), hamster.getyPos()));
         for (IGameObject obj : gameObjects)
             obj.update(interval);
     }
@@ -91,5 +97,6 @@ public class GameLogic implements IEngineLogic {
     public void cleanup() {
         for (IRenderable item : items)
             item.cleanUp();
+        hamsterFont.cleanup();
     }
 }
