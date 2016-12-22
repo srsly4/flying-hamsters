@@ -12,7 +12,7 @@ public class Main {
         System.out.println("Joł!");
         try {
             GameLogic logic = new GameLogic();
-            EngineThread engine = new EngineThread("Flying Hamsters", 1600, 900, true, logic);
+            EngineThread engine = new EngineThread("Flying Hamsters", 1280, 720, true, logic);
             engine.start();
         }
         catch (Exception e){

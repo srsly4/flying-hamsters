@@ -19,7 +19,7 @@ import java.nio.ByteBuffer;
 public class Font {
 
     private int textureId;
-    private STBTTBakedChar.Buffer buffer;
+    private final STBTTBakedChar.Buffer buffer;
     public Font(String fileName, int size) throws EngineException{
         try {
             textureId = glGenTextures();
@@ -39,7 +39,7 @@ public class Font {
         catch (IOException|NullPointerException|ArrayIndexOutOfBoundsException e){
             throw (EngineResourceException)(new EngineResourceException("Could not load font: " + fileName).initCause(e));
         }
-
-
     }
+    public int getTextureId() { return textureId; }
+    public STBTTBakedChar.Buffer getCharBuffer(){ return buffer; }
 }
