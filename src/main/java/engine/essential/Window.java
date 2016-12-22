@@ -14,7 +14,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 /**
  * Created by Szymon Piechaczek on 18.12.2016.
  */
-public class Window extends TimeManager {
+public class Window {
 
     private final String title;
     private int width;

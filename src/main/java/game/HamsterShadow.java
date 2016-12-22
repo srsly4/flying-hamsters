@@ -5,6 +5,7 @@ import engine.render.IRenderable;
 import engine.render.StaticSprite;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sirius on 21.12.2016.
@@ -35,9 +36,12 @@ public class HamsterShadow implements IGameObject {
     }
 
     @Override
-    public ArrayList<IRenderable> getRenderables() {
-        ArrayList<IRenderable> rlist = new ArrayList<>();
-        rlist.add(shadow);
-        return rlist;
+    public void cleanUp() {
+        shadow.cleanUp();
+    }
+
+    @Override
+    public void updateRenderables(final List<IRenderable> renderables) {
+        renderables.add(shadow);
     }
 }

@@ -5,11 +5,12 @@ import engine.render.IRenderable;
 import engine.render.StaticSprite;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
  */
-public class Hamster implements IGameObject {
+public class Hamster implements IGameObject, ICollidable {
     private float xPos = 200;
     private float yPos = 600;
     private float xVel = 5f;
@@ -22,6 +23,7 @@ public class Hamster implements IGameObject {
     private final StaticSprite sprite;
     private final World world;
 
+    private boolean grounded = false;
 
     public static final float groundPos = 100f;
     public static float maxYVel = 500f;
@@ -29,6 +31,11 @@ public class Hamster implements IGameObject {
         sprite = new StaticSprite("/sprites/hamster.xml");
         sprite.setVisibility(false);
         this.world = world;
+    }
+
+    @Override
+    public void cleanUp() {
+        sprite.cleanUp();
     }
 
     public void setPosition(float x, float y){
@@ -57,12 +64,11 @@ public class Hamster implements IGameObject {
         if (this.inAir)
         {
             if (this.fly){
-                yVel += 100f*interval;
-                xVel += 20f*interval;
+                yVel += 500f*interval;
+                xVel += 200f*interval;
             }
             else {
-                yVel -= 90f*interval;
-                xVel -= 5f*interval;
+                yVel -= 300f*interval;
             }
 
             //air force
@@ -73,13 +79,28 @@ public class Hamster implements IGameObject {
 
             yVel = Math.min(yVel, maxYVel);
 
-            yPos += 10*yVel*interval;
-            xPos += 10*xVel*interval;
+            yPos += yVel*interval;
+            xPos += xVel*interval;
+
+            float angle = (float)Math.toDegrees(Math.atan2(yVel, xVel));
+
+            //hamster touched the ground
             if (yPos <= groundPos)
             {
-                yPos = groundPos;
-                yVel = 0;
-                xVel = 0;
+                if (!grounded && xVel > 100f && Math.abs(angle) < 60f) //jump off the ground
+                {
+                    yVel = -yVel/2f;
+                    xVel = 0.75f*xVel;
+                    //we have to jump off the ground now
+                    yPos += yVel*interval;
+                    xPos += xVel*interval;
+                }
+                else {
+                    grounded = true;
+                    yPos = groundPos;
+                    yVel = 0;
+                    xVel = 0;
+                }
             }
 
             if (yPos < 0.5f*World.cameraHeight){
@@ -111,7 +132,7 @@ public class Hamster implements IGameObject {
             }
 
             world.setYPos(yPos);
-            sprite.setRotation((float)Math.toDegrees(Math.atan2(yVel, xVel)));
+            sprite.setRotation(angle);
             sprite.setPosition(World.worldCoordsToRender(realXPos, realYPos));
         }
 
@@ -126,9 +147,27 @@ public class Hamster implements IGameObject {
     }
 
     @Override
-    public ArrayList<IRenderable> getRenderables() {
-        ArrayList<IRenderable> rlist = new ArrayList<>();
-        rlist.add(sprite);
-        return rlist;
+    public void updateRenderables(final List<IRenderable> renderables) {
+        renderables.add(sprite);
+    }
+
+    @Override
+    public float getLeftBorder() {
+        return World.worldXCoordToRender(xPos)-(sprite.getSpriteWidth()/2f);
+    }
+
+    @Override
+    public float getRightBorder() {
+        return World.worldXCoordToRender(xPos)+(sprite.getSpriteWidth()/2f);
+    }
+
+    @Override
+    public float getTopBorder() {
+        return World.worldYCoordToRender(yPos)-(sprite.getSpriteHeight()/2f);
+    }
+
+    @Override
+    public float getBottomBorder() {
+        return World.worldYCoordToRender(yPos)+(sprite.getSpriteHeight()/2f);
     }
 }

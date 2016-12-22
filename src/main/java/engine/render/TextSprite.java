@@ -1,5 +1,6 @@
 package engine.render;
 
+import engine.essential.Window;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -37,6 +38,8 @@ public class TextSprite implements IRenderable {
     private final Vector2f textureOrigin;
     private float scale;
 
+    private final Window window;
+
     private FontBuffer font;
     private String text = "null";
 
@@ -45,12 +48,13 @@ public class TextSprite implements IRenderable {
     private int texVboId;
     private int vertexCount;
 
-    public TextSprite(FontBuffer font){
+    public TextSprite(FontBuffer font, Window window){
         this.font = font;
         this.position = new Vector3f(0, 0,0);
         this.rotation = new Vector3f(0, 0,0);
         this.textureOrigin = new Vector2f(0, 0);
         this.scale = 1f;
+        this.window = window;
     }
 
     public void setText(String text)
@@ -74,7 +78,7 @@ public class TextSprite implements IRenderable {
         List<Float> vertexes = new ArrayList<>();
         List<Float> texturePoints = new ArrayList<>();
 
-        final float lineSize = 2f*((float)font.getSize()*0.5625f)/720f;
+        final float lineSize = 2f*((float)font.getSize()*0.5625f)/(float)window.getHeight();
 
         float posX = 0f;
         float posY = 0f;

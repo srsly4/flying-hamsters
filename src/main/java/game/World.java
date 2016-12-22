@@ -6,6 +6,7 @@ import engine.render.StaticSprite;
 import org.joml.Vector2f;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
@@ -69,25 +70,28 @@ public class World implements IGameObject {
     }
 
     @Override
-    public ArrayList<IRenderable> getRenderables() {
-        ArrayList<IRenderable> rlist = new ArrayList<>();
-        rlist.add(background);
-        rlist.add(grass);
-        return rlist;
+    public void updateRenderables(List<IRenderable> renderables) {
+        renderables.add(background);
+        renderables.add(grass);
+    }
+
+    @Override
+    public void cleanUp() {
+        background.cleanUp();
+        grass.cleanUp();
     }
 
     private final static Vector2f coords = new Vector2f();
+    public static float worldXCoordToRender(float x){
+        return (2f*x/World.cameraWidth) -1f;
+    }
+    public static float worldYCoordToRender(float y){
+        return 0.5625f*((2f*y/World.cameraHeight)-1f);
+    }
     public static Vector2f worldCoordsToRender(float x, float y){
         //x, y are in-world values
         //x is from left to right (0+)
         //y is from down to up (0+)
-        x /= World.cameraWidth;
-        x *= 2f;
-        x -= 1.0f;
-        y /= World.cameraHeight;
-        y *= 2f;
-        y -= 1.0f;
-        y *= 0.5625f;
-        return World.coords.set(x, y);
+        return World.coords.set(worldXCoordToRender(x), worldYCoordToRender(y));
     }
 }
