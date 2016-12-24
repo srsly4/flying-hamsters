@@ -1,6 +1,8 @@
 package game;
 
+import engine.EngineException;
 import engine.render.IRenderable;
+import engine.render.StaticSprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,22 @@ public abstract class Grabbable implements IGameObject, ICollidable {
     private float topBorder;
     private float bottomBorder;
 
+    private boolean markerOn = false;
+    private StaticSprite tlMarker, trMarker, blMarker, brMarker;
+
     public Grabbable(IRenderable renderableInstance, float xPos, float yPos){
         renderable = renderableInstance;
+
+        //try to estimate width and height
+        if (renderable instanceof StaticSprite){
+            StaticSprite sprite = (StaticSprite)renderable;
+            width = World.renderWidthToWorld(sprite.getSpriteWidth());
+            height = World.renderHeightToWorld(sprite.getSpriteHeight());
+        }
         this.setPosition(xPos, yPos);
         world = World.getInstance();
         isUsed = false;
+
     }
 
     public boolean isUsed(){
@@ -37,16 +50,50 @@ public abstract class Grabbable implements IGameObject, ICollidable {
     public void executeOn(Hamster hamster) {
         this.isUsed = true;
         this.renderable.setVisibility(false);
-    };
+    }
+
+    public void setMarkers(final StaticSprite pattern){
+        try {
+            tlMarker = pattern.clone();
+            trMarker = pattern.clone();
+            blMarker = pattern.clone();
+            brMarker = pattern.clone();
+            markerOn = true;
+        }
+        catch (CloneNotSupportedException e)
+        {
+            //not possible
+        }
+    }
 
     @Override
     public void update(float interval) {
         renderable.setPosition(world.xPositionToRender(xPos), world.yPositionToRender(yPos));
+        if (markerOn){
+            tlMarker.setPosition(
+                    world.xPositionToRender(this.getLeftBorder()),
+                    world.yPositionToRender(this.getTopBorder()));
+            trMarker.setPosition(
+                    world.xPositionToRender(this.getRightBorder()),
+                    world.yPositionToRender(this.getTopBorder()));
+            blMarker.setPosition(
+                    world.xPositionToRender(this.getLeftBorder()),
+                    world.yPositionToRender(this.getBottomBorder()));
+            brMarker.setPosition(
+                    world.xPositionToRender(this.getRightBorder()),
+                    world.yPositionToRender(this.getBottomBorder()));
+        }
     }
 
     @Override
     public void updateRenderables(List<IRenderable> renderables) {
         renderables.add(renderable);
+        if (markerOn){
+            renderables.add(tlMarker);
+            renderables.add(trMarker);
+            renderables.add(blMarker);
+            renderables.add(brMarker);
+        }
     }
 
     @Override
@@ -89,8 +136,8 @@ public abstract class Grabbable implements IGameObject, ICollidable {
         //cache calculated border for performance
         leftBorder = xPos - (width/2f);
         rightBorder = xPos + (width/2f);
-        topBorder = yPos - (height/2f);
-        bottomBorder = yPos + (height/2f);
+        topBorder = yPos + (height/2f);
+        bottomBorder = yPos - (height/2f);
 
     }
 

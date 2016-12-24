@@ -15,9 +15,6 @@ public class Hamster implements IGameObject, ICollidable {
     private float yPos = 600;
     private float xVel = 5f;
     private float yVel = 0;
-    private float realXPos = 200f;
-    private float realYPos = 0f;
-    private float highestCameraY = 0f;
     private boolean fly = false;
     private boolean inAir = false;
     private final StaticSprite sprite;
@@ -25,10 +22,6 @@ public class Hamster implements IGameObject, ICollidable {
 
     private float width;
     private float height;
-    private float leftBorder;
-    private float rightBorder;
-    private float topBorder;
-    private float bottomBorder;
 
     private boolean grounded = false;
 
@@ -120,9 +113,9 @@ public class Hamster implements IGameObject, ICollidable {
                 }
             }
 
+            float realYPos;
             if (yPos < 0.5f*World.cameraHeight){
                 realYPos = yPos;
-                highestCameraY = yPos;
             }
             else {
                 realYPos = 0.5f*World.cameraHeight;
@@ -150,7 +143,7 @@ public class Hamster implements IGameObject, ICollidable {
 
             world.setYPos(yPos);
             sprite.setRotation(angle);
-            sprite.setPosition(World.worldCoordsToRender(realXPos, realYPos));
+            sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
         }
 
     }
@@ -180,12 +173,12 @@ public class Hamster implements IGameObject, ICollidable {
 
     @Override
     public float getTopBorder() {
-        return yPos-(height/2f);
+        return yPos+(height/2f);
     }
 
     @Override
     public float getBottomBorder() {
-        return yPos+(height/2f);
+        return yPos-(height/2f);
     }
 
 

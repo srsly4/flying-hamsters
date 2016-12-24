@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <sprite>
     <texture>/textures/marker.png</texture>
-    <width>0.05</width>
-    <height>0.05</height>
+    <width>0.005</width>
+    <height>0.005</height>
     <textureWidth>16</textureWidth>
     <textureHeight>16</textureHeight>
     <textureRepeatX>1</textureRepeatX>

@@ -13,7 +13,7 @@ public class RocketGrabbable extends Grabbable {
 
     @Override
     public void executeOn(Hamster hamster) {
-        hamster.setVelXY(5f*hamster.getxVel()+300f, 5f*hamster.getyVel() );
+        hamster.setVelXY(5f*hamster.getxVel(), 5f*hamster.getyVel() );
         super.executeOn(hamster);
     }
 }

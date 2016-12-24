@@ -54,7 +54,7 @@ public class GameLogic implements IEngineLogic {
         //logic initialize
         EventManager ev = EventManager.getInstance();
         ev.addEvent(new Event(0.5f, () -> {
-            hamster.setPosition(50f, 400f);
+            hamster.setPosition(0f, 400f);
             hamster.setInAir(true);
             hamster.setVelXY(800f, 90f);
             return null;
@@ -69,7 +69,7 @@ public class GameLogic implements IEngineLogic {
 
     @Override
     public void update(float interval) {
-        world.setXPos(hamster.getxPos());
+        world.setXPos(hamster.getxPos() - 200f); // world is behind hamster
         renderables.clear();
         for (IGameObject obj : gameObjects) {
             obj.update(interval);

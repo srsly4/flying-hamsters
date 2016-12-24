@@ -130,9 +130,9 @@ public class World implements IGameObject {
     }
 
     public static float renderWidthToWorld(float width){
-        return 2f*width*World.cameraWidth;
+        return width*World.cameraWidth;
     }
     public static float renderHeightToWorld(float height){
-        return 2f*height*World.cameraHeight;
+        return height*World.cameraWidth;
     }
 }

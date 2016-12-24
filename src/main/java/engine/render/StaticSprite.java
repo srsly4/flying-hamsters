@@ -109,6 +109,29 @@ public class StaticSprite implements IRenderable, Cloneable {
         glBindVertexArray(0);
 
     }
+
+    private StaticSprite(){
+        position = new Vector3f(0, 0, 0);
+        rotation = new Vector3f(0, 0, 0);
+        scale = 1f;
+        textureOrigin = new Vector2f(0, 0);
+    }
+
+
+    @Override
+    public StaticSprite clone() throws CloneNotSupportedException {
+        super.clone();
+        StaticSprite cln = new StaticSprite();
+        cln.vaoId = vaoId;
+        cln.texture = texture;
+        cln.vboId = vboId;
+        cln.texVboId = texVboId;
+        cln.vertexCount = vertexCount;
+        cln.spriteHeight = spriteHeight;
+        cln.spriteWidth = spriteWidth;
+        return cln;
+    }
+
     @Override
     public void render() {
         glActiveTexture(GL_TEXTURE0);
