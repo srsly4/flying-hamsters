@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/rocket.png</texture>
+    <width>0.1</width>
+    <height>0.021</height>
+    <textureWidth>256</textureWidth>
+    <textureHeight>54</textureHeight>
+    <textureRepeatX>1</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+</sprite>

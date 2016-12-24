@@ -21,9 +21,9 @@ public class UIInterface implements IGameObject {
     private final FontBuffer font;
     private final Window window;
 
-    public UIInterface(Hamster hamster, World world, Window window) throws EngineException {
+    public UIInterface(Hamster hamster, Window window) throws EngineException {
         this.hamster = hamster;
-        this.world = world;
+        this.world = World.getInstance();
         this.window = window;
 
         font = new FontBuffer("/fonts/RifficFree-Bold.ttf", 48, new Vector3f(1f, 1f, 1f));

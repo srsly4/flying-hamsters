@@ -11,7 +11,10 @@ public interface IRenderable {
     void cleanUp();
     Vector3f getPosition();
     Vector3f getRotation();
+    void setPosition(float x, float y);
+    void setPosition(Vector2f position);
     float getScale();
     Vector2f getTextureOrigin();
     boolean isVisible();
+    void setVisibility(boolean visibility);
 }

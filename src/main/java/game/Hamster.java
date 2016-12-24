@@ -23,14 +23,23 @@ public class Hamster implements IGameObject, ICollidable {
     private final StaticSprite sprite;
     private final World world;
 
+    private float width;
+    private float height;
+    private float leftBorder;
+    private float rightBorder;
+    private float topBorder;
+    private float bottomBorder;
+
     private boolean grounded = false;
 
     public static final float groundPos = 100f;
     public static float maxYVel = 500f;
-    public Hamster(World world) throws EngineException {
+    public Hamster() throws EngineException {
         sprite = new StaticSprite("/sprites/hamster.xml");
         sprite.setVisibility(false);
-        this.world = world;
+        this.world = World.getInstance();
+        width = World.renderWidthToWorld(sprite.getSpriteWidth());
+        height = World.renderHeightToWorld(sprite.getSpriteHeight());
     }
 
     @Override
@@ -57,6 +66,14 @@ public class Hamster implements IGameObject, ICollidable {
     {
         this.xVel = x;
         this.yVel = y;
+    }
+
+    public float getxVel() {
+        return xVel;
+    }
+
+    public float getyVel() {
+        return yVel;
     }
 
     @Override
@@ -153,21 +170,32 @@ public class Hamster implements IGameObject, ICollidable {
 
     @Override
     public float getLeftBorder() {
-        return World.worldXCoordToRender(xPos)-(sprite.getSpriteWidth()/2f);
+        return xPos - (width/2f);
     }
 
     @Override
     public float getRightBorder() {
-        return World.worldXCoordToRender(xPos)+(sprite.getSpriteWidth()/2f);
+        return xPos+(width/2f);
     }
 
     @Override
     public float getTopBorder() {
-        return World.worldYCoordToRender(yPos)-(sprite.getSpriteHeight()/2f);
+        return yPos-(height/2f);
     }
 
     @Override
     public float getBottomBorder() {
-        return World.worldYCoordToRender(yPos)+(sprite.getSpriteHeight()/2f);
+        return yPos+(height/2f);
+    }
+
+
+    @Override
+    public void collidedWith(ICollidable collidableObject) {
+        if (collidableObject instanceof Grabbable)
+        {
+            Grabbable grabbable = (Grabbable)collidableObject;
+            if (!grabbable.isUsed())
+                grabbable.executeOn(this);
+        }
     }
 }

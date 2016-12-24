@@ -28,7 +28,7 @@ import static org.lwjgl.opengl.GL30.*;
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
  */
-public class StaticSprite implements IRenderable {
+public class StaticSprite implements IRenderable, Cloneable {
     private final Vector3f position;
     private final Vector3f rotation;
     private float scale;

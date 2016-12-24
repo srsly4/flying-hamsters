@@ -1,5 +1,6 @@
 package game;
 
+import engine.EngineException;
 import engine.Event;
 import engine.EventManager;
 import engine.essential.*;
@@ -26,11 +27,12 @@ public class GameLogic implements IEngineLogic {
     private Hamster hamster;
     private HamsterShadow hamsterShadow;
     private UIInterface ui;
+    private GrabbableManager grabbables;
     public GameLogic() throws Exception{
     }
 
     @Override
-    public void init(Window window) throws Exception {
+    public void init(Window window) throws EngineException {
         renderer = new Renderer();
         renderer.init(window);
 
@@ -39,13 +41,15 @@ public class GameLogic implements IEngineLogic {
         renderables = new ArrayList<>();
         ((ArrayList)renderables).ensureCapacity(256);
 
-        world = new World();
-        hamster = new Hamster(world);
-        hamsterShadow = new HamsterShadow(world, hamster);
+        world = World.initializeInstance();
+        hamster = new Hamster();
+        hamsterShadow = new HamsterShadow(hamster);
 
-        ui = new UIInterface(hamster, world, window);
+        grabbables = new GrabbableManager(hamster);
 
-        gameObjects = new IGameObject[]{world, hamsterShadow, hamster, ui};
+        ui = new UIInterface(hamster, window);
+
+        gameObjects = new IGameObject[]{world, hamsterShadow, grabbables, hamster, ui};
 
         //logic initialize
         EventManager ev = EventManager.getInstance();

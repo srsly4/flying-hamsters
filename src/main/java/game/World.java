@@ -24,7 +24,7 @@ public class World implements IGameObject {
 //    public final StaticSprite movingBackground;
     public final StaticSprite grass;
 
-    public World() throws EngineException {
+    private World() throws EngineException {
         background = new StaticSprite("/sprites/background.xml");
 //        movingBackground = new StaticSprite("/sprites/mov_background.xml");
 //        movingBackground.setPosition(0, -0.5f+movingBackground.getSpriteHeight());
@@ -33,12 +33,30 @@ public class World implements IGameObject {
         grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
     }
 
+    private static World instance;
+    public static World initializeInstance() throws EngineException{
+        instance = new World();
+        return instance;
+    }
+    public static World getInstance() {
+        return instance;
+    }
+
+
     public void setXPos(float x){
         this.xPos = x;
     }
 
     public void setYPos(float y){
         this.yPos = y;
+    }
+
+    public float getxPos() {
+        return xPos;
+    }
+
+    public float getyPos() {
+        return yPos;
     }
 
     @Override
@@ -82,6 +100,22 @@ public class World implements IGameObject {
     }
 
     private final static Vector2f coords = new Vector2f();
+
+    public float xPositionToRender(float x){
+        return worldXCoordToRender(x-xPos);
+    }
+
+    public float yPositionToRender(float y){
+        if (yPos > 0.5f*World.cameraHeight)
+        {
+            return worldYCoordToRender(0.5f*World.cameraHeight+y-yPos);
+        }
+        else
+        {
+            return worldYCoordToRender(y);
+        }
+    }
+
     public static float worldXCoordToRender(float x){
         return (2f*x/World.cameraWidth) -1f;
     }
@@ -93,5 +127,12 @@ public class World implements IGameObject {
         //x is from left to right (0+)
         //y is from down to up (0+)
         return World.coords.set(worldXCoordToRender(x), worldYCoordToRender(y));
+    }
+
+    public static float renderWidthToWorld(float width){
+        return 2f*width*World.cameraWidth;
+    }
+    public static float renderHeightToWorld(float height){
+        return 2f*height*World.cameraHeight;
     }
 }

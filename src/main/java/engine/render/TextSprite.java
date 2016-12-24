@@ -199,6 +199,12 @@ public class TextSprite implements IRenderable {
     }
 
     @Override
+    public void setPosition(Vector2f position) {
+        this.position.x = position.x;
+        this.position.y = position.y;
+    }
+
+    @Override
     public Vector3f getRotation() {
         return this.rotation;
     }
@@ -216,5 +222,10 @@ public class TextSprite implements IRenderable {
     @Override
     public boolean isVisible() {
         return true; //todo: cos madrego
+    }
+
+    @Override
+    public void setVisibility(boolean visibility) {
+        //nope
     }
 }

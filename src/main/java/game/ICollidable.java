@@ -8,4 +8,5 @@ public interface ICollidable {
     float getRightBorder();
     float getTopBorder();
     float getBottomBorder();
+    void collidedWith(ICollidable collidableObject);
 }

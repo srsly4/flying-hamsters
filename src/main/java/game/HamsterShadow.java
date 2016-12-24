@@ -16,8 +16,8 @@ public class HamsterShadow implements IGameObject {
     private final Hamster hamster;
     public final StaticSprite shadow;
 
-    public HamsterShadow(World world, Hamster hamster) throws EngineException {
-        this.world = world;
+    public HamsterShadow(Hamster hamster) throws EngineException {
+        this.world = World.getInstance();
         this.hamster = hamster;
         shadow = new StaticSprite("/sprites/shadow.xml");
     }
