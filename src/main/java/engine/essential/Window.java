@@ -1,6 +1,9 @@
 package engine.essential;
 
 import static org.lwjgl.glfw.GLFW.*;
+
+import engine.EngineException;
+import engine.GLException;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -57,16 +60,20 @@ public class Window {
         return height;
     }
 
-    public void init(){
+    public void setKeyCallback(GLFWKeyCallback callback){
+        glfwSetKeyCallback(handle, callback);
+    }
+
+    public void init() throws EngineException{
         glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
 
         if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW");
+            throw new EngineException("Unable to initialize GLFW");
         }
 
-        glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // the window will be resizable
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -78,10 +85,10 @@ public class Window {
 
         handle = glfwCreateWindow(width, height, title, NULL, NULL);
         if (handle == NULL) {
-            throw new RuntimeException("Failed to create the GLFW window");
+            throw new GLException("Failed to create the GLFW window", "glfwCreateWindow");
         }
 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        // Default key callback (ESC -> exit)
         glfwSetKeyCallback(handle, (window, key, scancode, action, mods) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
             {
@@ -90,9 +97,9 @@ public class Window {
         });
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        // Center our window
-        glfwSetWindowPos(
 
+        // window will be centered
+        glfwSetWindowPos(
                 handle,
                 (vidmode.width() - width) / 2,
                 (vidmode.height() - height) / 2
@@ -102,7 +109,6 @@ public class Window {
 
         if (isVsync())
             glfwSwapInterval(1);
-
 
         glfwShowWindow(handle);
         GL.createCapabilities();

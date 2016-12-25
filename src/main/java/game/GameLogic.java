@@ -6,6 +6,7 @@ import engine.EventManager;
 import engine.essential.*;
 import engine.render.*;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFWKeyCallback;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,7 +30,7 @@ public class GameLogic implements IEngineLogic {
     private LaunchPillow pillow;
     private GrabbableManager grabbables;
     private UIInterface ui;
-    public GameLogic() throws Exception{
+    public GameLogic() throws EngineException{
     }
 
     @Override
@@ -39,6 +40,15 @@ public class GameLogic implements IEngineLogic {
 
         window.setClearColor(0.84f, 0.59f, 0.22f, 1.0f);
 
+        //initialize asynchronous key callbacks as local class
+        window.setKeyCallback(new GLFWKeyCallback() {
+            @Override
+            public void invoke(long windowHandle, int key, int scancode, int action, int mods) {
+                asynchronousInput(key, action, mods);
+            }
+        });
+
+        //initialize game objects
         renderables = new ArrayList<>();
         ((ArrayList)renderables).ensureCapacity(256);
 
@@ -54,25 +64,26 @@ public class GameLogic implements IEngineLogic {
 
         gameObjects = new IGameObject[]{world, hamsterShadow, pillow, grabbables, hamster, ui};
 
-        EventManager ev = EventManager.getInstance();
-
         //place the hamster on launch area
-        hamster.setPosition(0, Hamster.groundPos);
-        hamster.setState(HamsterState.BeforeLaunch);
-        ev.addEvent(new Event(2f, () -> {
-            hamster.setState(HamsterState.Launched);
-            hamster.setVelXY(0, 1000f);
-            return null;
-        }));
+        pillow.reset();
     }
 
     @Override
     public void input(Window window) {
         hamster.setFly(window.isKeyPressed(GLFW_KEY_SPACE));
+    }
+
+    private void asynchronousInput(int key, int action, int mods){
         if (hamster.getState() == HamsterState.Launched
                 && !pillow.isLaunched()
-                && window.isKeyPressed(GLFW_KEY_SPACE))
+                && key == GLFW_KEY_SPACE
+                && action == GLFW_PRESS)
             pillow.launch();
+
+        if (hamster.getState() == HamsterState.BeforeLaunch
+                && key == GLFW_KEY_SPACE
+                && action == GLFW_PRESS)
+            pillow.toss();
     }
 
     @Override

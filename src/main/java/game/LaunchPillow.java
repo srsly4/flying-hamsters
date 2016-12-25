@@ -35,7 +35,7 @@ public class LaunchPillow implements IGameObject {
     @Override
     public void update(float interval) {
         pillow.setPosition(world.xPositionToRender(isLaunched ? launchedPillowX : pillowX), world.yPositionToRender(pillowY));
-        if (hamster.getState() == HamsterState.Launched)
+        if (hamster.getState() == HamsterState.Launched || hamster.getState() == HamsterState.BeforeLaunch)
         {
             pillow.setRotation(180f-1f*(float) Math.toDegrees(Math.atan2(hamster.getyPos()-pillowY, pillowX)));
         }
@@ -44,6 +44,11 @@ public class LaunchPillow implements IGameObject {
 
     public boolean isLaunched(){
         return isLaunched;
+    }
+
+    public void toss(){
+        hamster.setState(HamsterState.Launched);
+        hamster.setVelXY(0, 1000f);
     }
 
     public void launch(){
@@ -70,6 +75,8 @@ public class LaunchPillow implements IGameObject {
 
     public void reset(){
         isLaunched = false;
+        hamster.setPosition(0, Hamster.groundPos);
+        hamster.setState(HamsterState.BeforeLaunch);
     }
 
     @Override
