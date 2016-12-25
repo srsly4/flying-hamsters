@@ -19,6 +19,7 @@ public class Hamster implements IGameObject, ICollidable {
     private float xAcc = 0f;
     private float yAcc = 0f;
     private float realYPos = 0f;
+    private float currentSpeed = 0f;
     private int customAcceleration = 0;
     private float currentAngle = 0f;
     private float animAngle = 0f;
@@ -237,8 +238,14 @@ public class Hamster implements IGameObject, ICollidable {
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
         world.setYPos(yPos);
 
-        if (sprite == flightSprite)
+        currentSpeed = (float)Math.sqrt((xVel*xVel)+(yVel*yVel));
+
+        if (sprite == flightSprite) {
             flightSprite.update(interval);
+            flightSprite.setFps(
+                    Math.max(4f, Math.min(60f, 40f*currentSpeed/3000f))
+            );
+        }
     }
 
     public float getxPos() {

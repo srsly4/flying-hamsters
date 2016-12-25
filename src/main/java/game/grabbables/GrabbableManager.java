@@ -31,9 +31,12 @@ public class GrabbableManager implements IGameObject {
         watchers.add(new GrabbableWatcher("rocket", 4250f, 1750f, 1000f));
         watchers.add(new GrabbableWatcher("rocket", 3100f, 2222f, 1800f));
         watchers.add(new GrabbableWatcher("rocket", 2050f, 1877f, 2100f));
+        watchers.add(new GrabbableWatcher("rocket", 3777f, 1200f, 3400f));
+        watchers.add(new GrabbableWatcher("rocket", 2496f, 1800f, 3900f));
         watchers.add(new GrabbableWatcher("wind", 2235f, 3000f, 680f));
         watchers.add(new GrabbableWatcher("wind", 2100f, 1700f, 1500f));
         watchers.add(new GrabbableWatcher("wind", 1760f, 1400f, 2800f));
+        watchers.add(new GrabbableWatcher("wind", 3140f, 1200f, 4300f));
         watchers.add(new GrabbableWatcher("rebound", 3670f, 2000f, Hamster.groundPos));
         watchers.add(new GrabbableWatcher("rebound", 3120f, 4500f, Hamster.groundPos));
 

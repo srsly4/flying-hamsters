@@ -20,6 +20,7 @@ public class UIInterface implements IGameObject {
     private final TextSprite position;
     private final TextSprite velocity;
     private final TextSprite strength;
+    private final TextSprite version;
     private final FontBuffer font;
     private final Window window;
 
@@ -29,14 +30,19 @@ public class UIInterface implements IGameObject {
         this.window = window;
 
         font = new FontBuffer("/fonts/RifficFree-Bold.ttf", 48, new Vector3f(1f, 1f, 1f));
-
-        position = new TextSprite(font, window);
+        FontBuffer debugFont = new FontBuffer("/fonts/RifficFree-Bold.ttf", 24, new Vector3f(1f, 1f, 1f));
+        position = new TextSprite(debugFont, window);
         position.setText("xPos: ");
         position.setPosition(-1f, 0.5625f);
 
-        velocity = new TextSprite(font, window);
+        velocity = new TextSprite(debugFont, window);
         velocity.setText("xVel: ");
-        velocity.setPosition(-1f, 0.5f);
+        velocity.setPosition(-1f, 0.53f);
+
+        version = new TextSprite(debugFont, window);
+        version.setText("alpha1");
+        version.setPosition(-1f, -0.53f);
+
         strength = new TextSprite(font, window);
         strength.setPosition(0.80f, 0.5625f);
         strength.setText("100%");
@@ -56,6 +62,7 @@ public class UIInterface implements IGameObject {
         renderables.add(velocity);
         if (hamster.getState() == HamsterState.InAir)
             renderables.add(strength);
+        renderables.add(version);
     }
 
     @Override
