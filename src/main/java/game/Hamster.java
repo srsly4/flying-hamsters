@@ -1,6 +1,7 @@
 package game;
 
 import engine.EngineException;
+import engine.render.AnimatedSprite;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
 
@@ -23,7 +24,7 @@ public class Hamster implements IGameObject, ICollidable {
     private HamsterState state;
 
 
-    private final StaticSprite sprite;
+    private final AnimatedSprite sprite;
     private final World world;
 
     private float width;
@@ -32,7 +33,7 @@ public class Hamster implements IGameObject, ICollidable {
     public static final float groundPos = 100f;
     public static float maxYVel = 500f;
     public Hamster() throws EngineException {
-        sprite = new StaticSprite("/sprites/hamster.xml");
+        sprite = new AnimatedSprite("/sprites/hamster.xml");
         this.world = World.getInstance();
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
@@ -199,6 +200,8 @@ public class Hamster implements IGameObject, ICollidable {
         }
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
         world.setYPos(yPos);
+
+        sprite.update(interval);
     }
 
     public float getxPos() {

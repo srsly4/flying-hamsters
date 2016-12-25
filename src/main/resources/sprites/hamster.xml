@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
-<sprite>
+<animatedsprite>
     <texture>/textures/hamster.png</texture>
     <width>0.075</width>
     <height>0.0462</height>
-    <textureWidth>256</textureWidth>
-    <textureHeight>158</textureHeight>
-    <textureRepeatX>1</textureRepeatX>
-    <textureRepeatY>1</textureRepeatY>
-</sprite>
+    <sheetSize>1024</sheetSize>
+    <frameWidth>256</frameWidth>
+    <frameHeight>158</frameHeight>
+    <frames>4</frames>
+    <fps>16</fps>
+</animatedsprite>

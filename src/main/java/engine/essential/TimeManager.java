@@ -10,7 +10,7 @@ public class TimeManager {
     /**
      * @return Current time in seconds
      */
-    public double getTime(){ return System.nanoTime() / 1.0E9; }
+    public static double getTime(){ return System.nanoTime() / 1.0E9; }
 
     public void init(){
         lastTime = getTime();

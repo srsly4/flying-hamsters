@@ -29,6 +29,8 @@ public class GameLogic implements IEngineLogic {
     private HamsterShadow hamsterShadow;
     private LaunchPillow pillow;
     private GrabbableManager grabbables;
+    private Window window;
+
 
     private LeapRanker leapRanker;
     private UIInterface ui;
@@ -39,7 +41,7 @@ public class GameLogic implements IEngineLogic {
     public void init(Window window) throws EngineException {
         renderer = new Renderer();
         renderer.init(window);
-
+        this.window = window;
         window.setClearColor(0.84f, 0.59f, 0.22f, 1.0f);
 
         //initialize asynchronous key callbacks as local class
@@ -73,9 +75,13 @@ public class GameLogic implements IEngineLogic {
     @Override
     public void input(Window window) {
         hamster.setFly(window.isKeyPressed(GLFW_KEY_SPACE));
+
     }
 
     private void asynchronousInput(int key, int action, int mods){
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+            window.setShouldClose();
+
         if (hamster.getState() == HamsterState.Launched
                 && !pillow.isLaunched()
                 && key == GLFW_KEY_SPACE

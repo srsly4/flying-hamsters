@@ -29,47 +29,39 @@ import static org.lwjgl.opengl.GL30.*;
  * Created by Szymon Piechaczek on 19.12.2016.
  */
 public class StaticSprite implements IRenderable, Cloneable {
-    private final Vector3f position;
-    private final Vector3f rotation;
-    private float scale;
-    private final Vector2f textureOrigin;
-    private float spriteWidth;
-    private float spriteHeight;
-    private boolean visibility = true;
+    protected final Vector3f position;
+    protected final Vector3f rotation;
+    protected float scale;
+    protected final Vector2f textureOrigin;
+    protected float spriteWidth;
+    protected float spriteHeight;
+    protected boolean visibility = true;
 
     private Texture texture;
     private int vaoId;
     private int vboId;
     private int texVboId;
     private int vertexCount;
-    public StaticSprite(String resourceName) throws EngineException{
+
+    protected StaticSprite(){
         position = new Vector3f(0, 0, 0);
         rotation = new Vector3f(0, 0, 0);
         scale = 1f;
         textureOrigin = new Vector2f(0, 0);
+    }
+
+    public StaticSprite(String resourceName) throws EngineException{
+        this();
 
         ObjectParser parser = ObjectParser.getInstance();
         parser.openResource(resourceName);
-        spriteWidth = parser.getFloatValue("width");
-        spriteHeight = parser.getFloatValue("height");
+        float spriteWidth = parser.getFloatValue("width");
+        float spriteHeight = parser.getFloatValue("height");
         String texUri = parser.getStringValue("texture");
         float texWidth = parser.getFloatValue("textureWidth");
         float texHeight = parser.getFloatValue("textureHeight");
         int repeatX = parser.getIntValue("textureRepeatX");
         int repeatY = parser.getIntValue("textureRepeatY");
-
-        texture = new Texture(texUri);
-
-        float[] points = new float[]{
-                -spriteWidth,  spriteHeight,  0,
-                -spriteWidth, -spriteHeight,  0,
-                spriteWidth, -spriteHeight,  0,
-                -spriteWidth, spriteHeight, 0,
-                spriteWidth, spriteHeight, 0,
-                spriteWidth, -spriteHeight, 0
-        };
-
-        this.vertexCount = points.length/3;
 
         float texLongest = Math.max(texWidth, texHeight);
         float wTexWidth = (texWidth/texLongest)*(float)repeatX;
@@ -82,6 +74,26 @@ public class StaticSprite implements IRenderable, Cloneable {
                 wTexWidth, 0f, //prawy gorny
                 wTexWidth, wTexHeight //prawy dolny
         };
+
+        initObject(texUri, spriteWidth, spriteHeight, texCoords);
+    }
+
+    protected void initObject(String texUri, float spriteWidth, float spriteHeight, float[] texCoords)
+    throws EngineException{
+        this.spriteHeight = spriteHeight;
+        this.spriteWidth = spriteWidth;
+
+        texture = new Texture(texUri);
+
+        float[] points = new float[]{
+                -spriteWidth,  spriteHeight,  0,
+                -spriteWidth, -spriteHeight,  0,
+                spriteWidth, -spriteHeight,  0,
+                -spriteWidth, spriteHeight, 0,
+                spriteWidth, spriteHeight, 0,
+                spriteWidth, -spriteHeight, 0
+        };
+        this.vertexCount = points.length/3;
 
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(points.length);
         verticesBuffer.put(points);
@@ -107,14 +119,6 @@ public class StaticSprite implements IRenderable, Cloneable {
         //set handle to 0
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-
-    }
-
-    private StaticSprite(){
-        position = new Vector3f(0, 0, 0);
-        rotation = new Vector3f(0, 0, 0);
-        scale = 1f;
-        textureOrigin = new Vector2f(0, 0);
     }
 
 

@@ -47,6 +47,10 @@ public class Window {
         return glfwWindowShouldClose(handle);
     }
 
+    public void setShouldClose(){
+        glfwSetWindowShouldClose(handle, true);
+    }
+
     public String getTitle() {
         return title;
     }
