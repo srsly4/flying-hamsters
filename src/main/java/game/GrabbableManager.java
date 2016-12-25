@@ -29,6 +29,7 @@ public class GrabbableManager implements IGameObject {
         watchers = new LinkedList<>();
         watchers.add(new GrabbableWatcher("rocket", 2000f, 1500f, 600f));
         watchers.add(new GrabbableWatcher("rocket", 4250f, 1750f, 800f));
+        watchers.add(new GrabbableWatcher("wind", 835f, 2000f, 380f));
 
         collidables = new ArrayList<>();
     }
