@@ -32,6 +32,11 @@ public class GrabbableManager implements IGameObject {
         collidables = new ArrayList<>();
     }
 
+    public void reset(){
+        for (GrabbableWatcher w : watchers)
+            w.reset();
+    }
+
     @Override
     public void update(float interval) {
         collidables.clear();

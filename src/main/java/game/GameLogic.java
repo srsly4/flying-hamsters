@@ -29,6 +29,8 @@ public class GameLogic implements IEngineLogic {
     private HamsterShadow hamsterShadow;
     private LaunchPillow pillow;
     private GrabbableManager grabbables;
+
+    private LeapRanker leapRanker;
     private UIInterface ui;
     public GameLogic() throws EngineException{
     }
@@ -59,10 +61,10 @@ public class GameLogic implements IEngineLogic {
         grabbables = new GrabbableManager(hamster);
         pillow = new LaunchPillow(hamster);
 
-
+        leapRanker = new LeapRanker(hamster, window);
         ui = new UIInterface(hamster, window);
 
-        gameObjects = new IGameObject[]{world, hamsterShadow, pillow, grabbables, hamster, ui};
+        gameObjects = new IGameObject[]{world, hamsterShadow, pillow, grabbables, hamster, leapRanker, ui};
 
         //place the hamster on launch area
         pillow.reset();
@@ -84,17 +86,33 @@ public class GameLogic implements IEngineLogic {
                 && key == GLFW_KEY_SPACE
                 && action == GLFW_PRESS)
             pillow.toss();
+
+        if (hamster.getState() == HamsterState.Grounded
+                && key == GLFW_KEY_SPACE
+                && action == GLFW_PRESS)
+        {
+            leapRanker.reset();
+            grabbables.reset();
+            pillow.reset();
+        }
     }
 
     @Override
     public void update(float interval) {
         world.setXPos(hamster.getxPos() - 200f); // world is behind hamster
+
+        //check if hamster has landed
+        if (!leapRanker.isResultCalculated() && hamster.getState() == HamsterState.Grounded)
+        {
+            leapRanker.showResult();
+        }
+
+        //update renderables
         renderables.clear();
         for (IGameObject obj : gameObjects) {
             obj.update(interval);
             obj.updateRenderables(renderables);
         }
-
         renderablesCache = renderables.toArray(new IRenderable[]{});
     }
 

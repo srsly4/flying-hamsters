@@ -39,6 +39,14 @@ public class GrabbableWatcher {
     }
 
     /**
+     * Clears all the grabbables from watcher and reset position to start
+     */
+    public void reset(){
+        nextX = xPosStart;
+        series.clear();
+    }
+
+    /**
      * Removes series grabbables two World.cameraWidth behind current position
      * and creates object two World.cameraWidth after current position.
      * Also calls update on all left Grabbables

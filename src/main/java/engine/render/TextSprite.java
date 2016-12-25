@@ -37,6 +37,7 @@ public class TextSprite implements IRenderable {
     private final Vector3f position;
     private final Vector2f textureOrigin;
     private float scale;
+    private boolean visibility = true;
 
     private final Window window;
 
@@ -221,12 +222,12 @@ public class TextSprite implements IRenderable {
 
     @Override
     public boolean isVisible() {
-        return true; //todo: cos madrego
+        return visibility;
     }
 
     @Override
     public void setVisibility(boolean visibility) {
-        //nope
+        this.visibility = visibility;
     }
 
     @Override

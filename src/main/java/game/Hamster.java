@@ -21,6 +21,8 @@ public class Hamster implements IGameObject, ICollidable {
     private float currentAngle = 0f;
     private boolean fly = false;
     private HamsterState state;
+
+
     private final StaticSprite sprite;
     private final World world;
 
@@ -241,5 +243,13 @@ public class Hamster implements IGameObject, ICollidable {
             if (!grabbable.isUsed())
                 grabbable.executeOn(this);
         }
+    }
+
+    public float getWorldWidth(){
+        return width;
+    }
+
+    public float getWorldHeight(){
+        return height;
     }
 }
