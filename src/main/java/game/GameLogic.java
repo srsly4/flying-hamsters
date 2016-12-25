@@ -26,8 +26,9 @@ public class GameLogic implements IEngineLogic {
     private World world;
     private Hamster hamster;
     private HamsterShadow hamsterShadow;
-    private UIInterface ui;
+    private LaunchPillow pillow;
     private GrabbableManager grabbables;
+    private UIInterface ui;
     public GameLogic() throws Exception{
     }
 
@@ -46,17 +47,21 @@ public class GameLogic implements IEngineLogic {
         hamsterShadow = new HamsterShadow(hamster);
 
         grabbables = new GrabbableManager(hamster);
+        pillow = new LaunchPillow(hamster);
+
 
         ui = new UIInterface(hamster, window);
 
-        gameObjects = new IGameObject[]{world, hamsterShadow, grabbables, hamster, ui};
+        gameObjects = new IGameObject[]{world, hamsterShadow, pillow, grabbables, hamster, ui};
 
-        //logic initialize
         EventManager ev = EventManager.getInstance();
-        ev.addEvent(new Event(0.5f, () -> {
-            hamster.setPosition(0f, 400f);
-            hamster.setInAir(true);
-            hamster.setVelXY(800f, 90f);
+
+        //place the hamster on launch area
+        hamster.setPosition(0, Hamster.groundPos);
+        hamster.setState(HamsterState.BeforeLaunch);
+        ev.addEvent(new Event(2f, () -> {
+            hamster.setState(HamsterState.Launched);
+            hamster.setVelXY(0, 1000f);
             return null;
         }));
     }
@@ -64,7 +69,10 @@ public class GameLogic implements IEngineLogic {
     @Override
     public void input(Window window) {
         hamster.setFly(window.isKeyPressed(GLFW_KEY_SPACE));
-
+        if (hamster.getState() == HamsterState.Launched
+                && !pillow.isLaunched()
+                && window.isKeyPressed(GLFW_KEY_SPACE))
+            pillow.launch();
     }
 
     @Override

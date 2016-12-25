@@ -23,7 +23,6 @@ public class RocketGrabbable extends Grabbable {
         float dx = xRelative*boost*(float)Math.cos(angle);
         float dy = boost*(float)Math.sin(angle);
         hamster.setCustomAcceleration(dx, dy);
-        System.out.println("Activated boost!");
         EventManager.getInstance().addEvent(new Event(duration, ()->{
             hamster.unsetCustomAcceleration(dx, dy);
             return null;

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/pillow.png</texture>
+    <width>0.05156</width>
+    <height>0.075</height>
+    <textureWidth>88</textureWidth>
+    <textureHeight>128</textureHeight>
+    <textureRepeatX>1</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+</sprite>
