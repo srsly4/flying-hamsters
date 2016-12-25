@@ -1,8 +1,12 @@
-package game;
+package game.grabbables;
 
 import engine.EngineException;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
+import game.Hamster;
+import game.ICollidable;
+import game.IGameObject;
+import game.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,7 @@ import java.util.List;
  */
 public abstract class Grabbable implements IGameObject, ICollidable {
 
-    private IRenderable renderable;
+    protected IRenderable renderable;
     protected float xPos;
     protected float yPos;
     protected float width = 50f;

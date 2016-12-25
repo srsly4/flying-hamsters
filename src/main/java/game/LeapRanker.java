@@ -27,8 +27,9 @@ public class LeapRanker implements IGameObject {
         this.hamster = hamster;
         world = World.getInstance();
 
-        fontBuffer = new FontBuffer("/fonts/RifficFree-Bold.ttf", 64, new Vector3f(0.88f, 0.63f, 0.23f));
+        fontBuffer = new FontBuffer("/fonts/RifficFree-Bold.ttf", 64, new Vector3f(1f, 1f, 1f));
         groundRank = new TextSprite(fontBuffer, window);
+        groundRank.setScale(1f);
         groundRank.setText("0m");
         groundRank.setVisibility(false);
     }

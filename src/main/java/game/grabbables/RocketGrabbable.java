@@ -1,8 +1,10 @@
-package game;
+package game.grabbables;
 
 import engine.Event;
 import engine.EventManager;
 import engine.render.IRenderable;
+import game.Hamster;
+import game.grabbables.Grabbable;
 
 /**
  * Created by Sirius on 24.12.2016.

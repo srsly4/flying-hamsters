@@ -62,6 +62,10 @@ public class AnimatedSprite extends StaticSprite {
         setTextureOrigin((float)currentFrame*frameWidth, 0f);
     }
 
+    public void setFrame(int frame){
+        currentFrame = Math.min(frame, frames-1);
+    }
+
     public int getFrames() {
         return frames;
     }

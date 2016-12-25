@@ -1,13 +1,15 @@
-package game;
+package game.grabbables;
 
 import engine.EngineException;
 import engine.render.IRenderable;
-import engine.render.StaticSprite;
+import game.Hamster;
+import game.ICollidable;
+import game.IGameObject;
+import game.World;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.awt.*;
 
 /**
  * Created by Sirius on 22.12.2016.
@@ -25,9 +27,15 @@ public class GrabbableManager implements IGameObject {
         world = World.getInstance();
 
         watchers = new LinkedList<>();
-        watchers.add(new GrabbableWatcher("rocket", 2000f, 1500f, 600f));
-        watchers.add(new GrabbableWatcher("rocket", 4250f, 1750f, 800f));
+        watchers.add(new GrabbableWatcher("rocket", 2000f, 1500f, 800f));
+        watchers.add(new GrabbableWatcher("rocket", 4250f, 1750f, 1000f));
+        watchers.add(new GrabbableWatcher("rocket", 3100f, 2222f, 1800f));
+        watchers.add(new GrabbableWatcher("rocket", 2050f, 1877f, 2100f));
         watchers.add(new GrabbableWatcher("wind", 2235f, 3000f, 680f));
+        watchers.add(new GrabbableWatcher("wind", 2100f, 1700f, 1500f));
+        watchers.add(new GrabbableWatcher("wind", 1760f, 1400f, 2800f));
+        watchers.add(new GrabbableWatcher("rebound", 3670f, 2000f, Hamster.groundPos));
+        watchers.add(new GrabbableWatcher("rebound", 3120f, 4500f, Hamster.groundPos));
 
         collidables = new ArrayList<>();
     }

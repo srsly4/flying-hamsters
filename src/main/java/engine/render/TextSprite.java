@@ -234,4 +234,8 @@ public class TextSprite implements IRenderable {
     public IRenderable clone() throws CloneNotSupportedException {
         return (IRenderable) super.clone();
     }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
 }

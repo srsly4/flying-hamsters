@@ -1,8 +1,10 @@
-package game;
+package game.grabbables;
 
 import engine.EngineException;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
+import game.ICollidable;
+import game.World;
 
 import java.util.Deque;
 import java.util.LinkedList;

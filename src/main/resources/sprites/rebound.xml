@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<animatedsprite>
+    <texture>/textures/rebound_all.png</texture>
+    <width>0.075</width>
+    <height>0.06503</height>
+    <sheetSize>256</sheetSize>
+    <frameWidth>128</frameWidth>
+    <frameHeight>111</frameHeight>
+    <frames>2</frames>
+    <fps>1</fps>
+</animatedsprite>

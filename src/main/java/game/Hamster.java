@@ -4,8 +4,8 @@ import engine.EngineException;
 import engine.render.AnimatedSprite;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
+import game.grabbables.Grabbable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +23,8 @@ public class Hamster implements IGameObject, ICollidable {
     private float currentAngle = 0f;
     private float animAngle = 0f;
     private boolean fly = false;
+    private float flightStrength = 100f;
     private HamsterState state;
-
 
     private StaticSprite sprite;
     private final AnimatedSprite flightSprite;
@@ -103,8 +103,10 @@ public class Hamster implements IGameObject, ICollidable {
             sprite = this.flightSprite;
         if (state == HamsterState.Launched)
             sprite = this.tossSprite;
-        if (state == HamsterState.Grounded)
+        if (state == HamsterState.Grounded) {
             sprite = this.landedSprite;
+            currentAngle  = 0f;
+        }
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
@@ -112,6 +114,20 @@ public class Hamster implements IGameObject, ICollidable {
 
     @Override
     public void update(float interval) {
+        //flight strength
+        if (!fly && flightStrength < 100f)
+            flightStrength += interval*20f; //5 sec to fullfill
+        if (fly) {
+            flightStrength -= interval * 100f; // 1 sec to use whole
+            if (flightStrength <= 0f)
+            {
+                fly = false;
+                flightStrength = 0f;
+            }
+        }
+        if (flightStrength > 100f)
+            flightStrength = 100f;
+
         if (this.state == HamsterState.BeforeLaunch)
         {
             xVel = 0;
@@ -146,7 +162,7 @@ public class Hamster implements IGameObject, ICollidable {
             }
             else {
                 //standard air/gravity conditions
-                if (this.fly){
+                if (this.fly && this.flightStrength > 0f){
                     yVel += 500f*interval;
                     xVel += 200f*interval;
                 }
@@ -173,7 +189,7 @@ public class Hamster implements IGameObject, ICollidable {
             {
                 if (state != HamsterState.Grounded && xVel > 100f && Math.abs(angle) < 60f) //jump off the ground
                 {
-                    yVel = -yVel/2f;
+                    yVel = -yVel/4f;
                     xVel = 0.75f*xVel;
                     //we have to jump off the ground now
                     yPos += yVel*interval;
@@ -275,5 +291,9 @@ public class Hamster implements IGameObject, ICollidable {
 
     public float getWorldHeight(){
         return height;
+    }
+
+    public float getFlightStrength() {
+        return flightStrength;
     }
 }

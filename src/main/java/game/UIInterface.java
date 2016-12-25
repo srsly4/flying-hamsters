@@ -19,6 +19,7 @@ public class UIInterface implements IGameObject {
     private final World world;
     private final TextSprite position;
     private final TextSprite velocity;
+    private final TextSprite strength;
     private final FontBuffer font;
     private final Window window;
 
@@ -36,18 +37,25 @@ public class UIInterface implements IGameObject {
         velocity = new TextSprite(font, window);
         velocity.setText("xVel: ");
         velocity.setPosition(-1f, 0.5f);
+        strength = new TextSprite(font, window);
+        strength.setPosition(0.80f, 0.5625f);
+        strength.setText("100%");
     }
 
     @Override
     public void update(float interval) {
         position.setText(String.format("x: %.0f, y: %.0f", hamster.getxPos(), hamster.getyPos()));
         velocity.setText(String.format("vel: x: %.0f, y: %.0f", hamster.getxVel(), hamster.getyVel()));
+        if (hamster.getState() == HamsterState.InAir)
+            strength.setText(String.format("%.0f%%", hamster.getFlightStrength()));
     }
 
     @Override
     public void updateRenderables(final List<IRenderable> renderables) {
         renderables.add(position);
         renderables.add(velocity);
+        if (hamster.getState() == HamsterState.InAir)
+            renderables.add(strength);
     }
 
     @Override
