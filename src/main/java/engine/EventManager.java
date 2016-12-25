@@ -48,8 +48,8 @@ public class EventManager {
     public static void initializeInstance(TimeManager time){
         instance = new EventManager(time);
     }
-    public static EventManager getInstance() throws EngineException{
-        if (instance == null) throw new EngineException("EventManager has not benn initialized");
+    public static EventManager getInstance(){
+//        if (instance == null) throw new EngineException("EventManager has not been initialized");
         return instance;
     }
 }

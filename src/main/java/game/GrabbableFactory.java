@@ -20,11 +20,27 @@ public class GrabbableFactory {
     }
 
     public static Grabbable createRocketGrabbable(float x, float y){
-        return new RocketGrabbable(
-                renderableInstances.get("rocket"),
-                x,
-                y
-        );
+        try {
+            return new RocketGrabbable(
+                    renderableInstances.get("rocket").clone(),
+                    x,
+                    y
+            );
+        }
+        catch (CloneNotSupportedException ce){
+            throw new RuntimeException(ce);
+        }
     }
+
+    public static Grabbable createGrabbable(String type, float x, float y){
+        switch (type){
+            case "rocket":
+                return createRocketGrabbable(x, y);
+
+            default:
+                throw new RuntimeException("Unknown grabbable type");
+        }
+    }
+
 
 }

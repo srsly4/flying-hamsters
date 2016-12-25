@@ -15,6 +15,10 @@ public class Hamster implements IGameObject, ICollidable {
     private float yPos = 600;
     private float xVel = 5f;
     private float yVel = 0;
+    private float xAcc = 0f;
+    private float yAcc = 0f;
+    private int customAcceleration = 0;
+    private float currentAngle = 0f;
     private boolean fly = false;
     private boolean inAir = false;
     private final StaticSprite sprite;
@@ -69,31 +73,51 @@ public class Hamster implements IGameObject, ICollidable {
         return yVel;
     }
 
+    public void setCustomAcceleration(float xAcc, float yAcc){
+        this.xAcc = xAcc;
+        this.yAcc = yAcc;
+        this.customAcceleration++;
+    }
+
+    public void unsetCustomAcceleration(float xAcc, float yAcc){
+        this.xAcc -= xAcc;
+        this.yAcc -= yAcc;
+        this.customAcceleration--;
+    }
+
     @Override
     public void update(float interval) {
         if (this.inAir)
         {
-            if (this.fly){
-                yVel += 500f*interval;
-                xVel += 200f*interval;
+            if (this.customAcceleration > 0)
+            {
+                xVel += xAcc*interval;
+                yVel += yAcc*interval;
             }
             else {
-                yVel -= 300f*interval;
+                //standard air/gravity conditions
+                if (this.fly){
+                    yVel += 500f*interval;
+                    xVel += 200f*interval;
+                }
+                else {
+                    yVel -= 400f*interval;
+                }
+
+                //air force
+                if (xVel <= 0.0f)
+                    xVel = 0.0f;
+                else
+                    xVel -= interval*0.25f*(xVel);
+
+//                yVel = Math.min(yVel, maxYVel); NOOOOPE!
             }
-
-            //air force
-            if (xVel <= 0.0f)
-                xVel = 0.0f;
-            else
-                xVel -= interval*0.001*(xVel*xVel);
-
-            yVel = Math.min(yVel, maxYVel);
 
             yPos += yVel*interval;
             xPos += xVel*interval;
 
             float angle = (float)Math.toDegrees(Math.atan2(yVel, xVel));
-
+            currentAngle = currentAngle + 0.25f*(angle - currentAngle);
             //hamster touched the ground
             if (yPos <= groundPos)
             {
@@ -142,7 +166,7 @@ public class Hamster implements IGameObject, ICollidable {
             }
 
             world.setYPos(yPos);
-            sprite.setRotation(angle);
+            sprite.setRotation(currentAngle);
             sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
         }
 

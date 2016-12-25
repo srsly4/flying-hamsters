@@ -228,4 +228,9 @@ public class TextSprite implements IRenderable {
     public void setVisibility(boolean visibility) {
         //nope
     }
+
+    @Override
+    public IRenderable clone() throws CloneNotSupportedException {
+        return (IRenderable) super.clone();
+    }
 }

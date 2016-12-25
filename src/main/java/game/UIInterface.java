@@ -18,6 +18,7 @@ public class UIInterface implements IGameObject {
     private final Hamster hamster;
     private final World world;
     private final TextSprite position;
+    private final TextSprite velocity;
     private final FontBuffer font;
     private final Window window;
 
@@ -27,24 +28,32 @@ public class UIInterface implements IGameObject {
         this.window = window;
 
         font = new FontBuffer("/fonts/RifficFree-Bold.ttf", 48, new Vector3f(1f, 1f, 1f));
+
         position = new TextSprite(font, window);
         position.setText("xPos: ");
         position.setPosition(-1f, 0.5625f);
+
+        velocity = new TextSprite(font, window);
+        velocity.setText("xVel: ");
+        velocity.setPosition(-1f, 0.5f);
     }
 
     @Override
     public void update(float interval) {
         position.setText(String.format("x: %.0f, y: %.0f", hamster.getxPos(), hamster.getyPos()));
+        velocity.setText(String.format("vel: x: %.0f, y: %.0f", hamster.getxVel(), hamster.getyVel()));
     }
 
     @Override
     public void updateRenderables(final List<IRenderable> renderables) {
         renderables.add(position);
+        renderables.add(velocity);
     }
 
     @Override
     public void cleanUp() {
         position.cleanUp();
+        velocity.cleanUp();
         font.cleanup();
     }
 }

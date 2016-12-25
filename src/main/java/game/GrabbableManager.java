@@ -5,6 +5,7 @@ import engine.render.IRenderable;
 import engine.render.StaticSprite;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.awt.*;
 
@@ -13,60 +14,41 @@ import java.awt.*;
  */
 public class GrabbableManager implements IGameObject {
 
-    private Grabbable test;
     private final Hamster hamster;
     private List<ICollidable> collidables;
+    private List<GrabbableWatcher> watchers;
     private final World world;
 
 //    private StaticSprite tlMarker, trMarker, blMarker, brMarker;
 
     public GrabbableManager(Hamster hamster) throws EngineException{
         GrabbableFactory.initialize();
-        test = GrabbableFactory.createRocketGrabbable(1500f, 450f);
         this.hamster = hamster;
         world = World.getInstance();
-        collidables = new ArrayList<>();
-        collidables.add(test);
 
-//        tlMarker = new StaticSprite("/sprites/marker.xml");
-//        test.setMarkers(tlMarker);
-//        try {
-//            trMarker = tlMarker.clone();
-//            blMarker = tlMarker.clone();
-//            brMarker = tlMarker.clone();
-//        }
-//        catch (CloneNotSupportedException e)
-//        {
-//            //not possible
-//        }
+        watchers = new LinkedList<>();
+        watchers.add(new GrabbableWatcher("rocket", 2000f, 1500f, 600f));
+        watchers.add(new GrabbableWatcher("rocket", 4250f, 1750f, 800f));
+
+        collidables = new ArrayList<>();
     }
 
     @Override
     public void update(float interval) {
-//        tlMarker.setPosition(
-//                world.xPositionToRender(hamster.getLeftBorder()),
-//                world.yPositionToRender(hamster.getTopBorder()));
-//        trMarker.setPosition(
-//                world.xPositionToRender(hamster.getRightBorder()),
-//                world.yPositionToRender(hamster.getTopBorder()));
-//        blMarker.setPosition(
-//                world.xPositionToRender(hamster.getLeftBorder()),
-//                world.yPositionToRender(hamster.getBottomBorder()));
-//        brMarker.setPosition(
-//                world.xPositionToRender(hamster.getRightBorder()),
-//                world.yPositionToRender(hamster.getBottomBorder()));
+        collidables.clear();
+        for (GrabbableWatcher gw : watchers) {
+            gw.process(interval);
+            gw.updateCollidables(collidables);
+        }
 
-        test.update(interval);
         processCollidables(hamster, collidables);
     }
 
     @Override
     public void updateRenderables(List<IRenderable> renderables) {
-        test.updateRenderables(renderables);
-//        renderables.add(tlMarker);
-//        renderables.add(trMarker);
-//        renderables.add(blMarker);
-//        renderables.add(brMarker);
+        for (GrabbableWatcher gw : watchers) {
+            gw.updateRenderables(renderables);
+        }
     }
 
 
