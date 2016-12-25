@@ -18,13 +18,19 @@ public class Hamster implements IGameObject, ICollidable {
     private float yVel = 0;
     private float xAcc = 0f;
     private float yAcc = 0f;
+    private float realYPos = 0f;
     private int customAcceleration = 0;
     private float currentAngle = 0f;
+    private float animAngle = 0f;
     private boolean fly = false;
     private HamsterState state;
 
 
-    private final AnimatedSprite sprite;
+    private StaticSprite sprite;
+    private final AnimatedSprite flightSprite;
+    private final StaticSprite tossSprite;
+    private final StaticSprite readySprite;
+    private final StaticSprite landedSprite;
     private final World world;
 
     private float width;
@@ -33,7 +39,10 @@ public class Hamster implements IGameObject, ICollidable {
     public static final float groundPos = 100f;
     public static float maxYVel = 500f;
     public Hamster() throws EngineException {
-        sprite = new AnimatedSprite("/sprites/hamster.xml");
+        sprite = flightSprite = new AnimatedSprite("/sprites/hamster.xml");
+        tossSprite = new StaticSprite("/sprites/hamster_toss.xml");
+        readySprite = new StaticSprite("/sprites/hamster_ready.xml");
+        landedSprite = new StaticSprite("/sprites/hamster_landed.xml");
         this.world = World.getInstance();
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
@@ -88,6 +97,17 @@ public class Hamster implements IGameObject, ICollidable {
 
     public void setState(HamsterState state) {
         this.state = state;
+        if (state == HamsterState.BeforeLaunch)
+            sprite = this.readySprite;
+        if (state == HamsterState.InAir)
+            sprite = this.flightSprite;
+        if (state == HamsterState.Launched)
+            sprite = this.tossSprite;
+        if (state == HamsterState.Grounded)
+            sprite = this.landedSprite;
+        width = World.renderWidthToWorld(sprite.getSpriteWidth());
+        height = World.renderHeightToWorld(sprite.getSpriteHeight());
+        sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
     }
 
     @Override
@@ -98,24 +118,25 @@ public class Hamster implements IGameObject, ICollidable {
             yVel = 0;
             sprite.setRotation(0);
         }
-        if (this.state == HamsterState.Launched)
-        {
+        if (this.state == HamsterState.Launched) {
             //only y coordinates change
             xVel = 0;
-            yVel -= 800f*interval;
+            yVel -= 800f * interval;
 
-            yPos += yVel*interval;
+            yPos += yVel * interval;
 
-            if (yPos <= groundPos)
-            {
-                state = HamsterState.Grounded; //bad timing ;)
+            if (yPos <= groundPos) {
+                setState(HamsterState.Grounded); //bad timing ;)
                 yVel = 0f;
                 yPos = groundPos;
             }
 
             sprite.setRotation(0);
+            sprite.setRotation(animAngle);
+            animAngle += interval * 2000f;
+            if (animAngle > 360f)
+                animAngle -= 360f;
         }
-
         if (this.state == HamsterState.InAir)
         {
             if (this.customAcceleration > 0)
@@ -159,7 +180,7 @@ public class Hamster implements IGameObject, ICollidable {
                     xPos += xVel*interval;
                 }
                 else {
-                    state = HamsterState.Grounded;
+                    setState(HamsterState.Grounded);
                     yPos = groundPos;
                     yVel = 0;
                     xVel = 0;
@@ -171,7 +192,6 @@ public class Hamster implements IGameObject, ICollidable {
         }
 
         //camera
-        float realYPos;
         if (yPos < 0.5f*World.cameraHeight){
             realYPos = yPos;
         }
@@ -201,7 +221,8 @@ public class Hamster implements IGameObject, ICollidable {
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
         world.setYPos(yPos);
 
-        sprite.update(interval);
+        if (sprite == flightSprite)
+            flightSprite.update(interval);
     }
 
     public float getxPos() {
