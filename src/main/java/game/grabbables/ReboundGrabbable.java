@@ -23,6 +23,7 @@ public class ReboundGrabbable extends Grabbable {
         if (isUsed) return;
         isUsed = true;
         hamster.setVelXY(hamster.getxVel() + 1000f, Math.abs(hamster.getyVel())+500f);
+
         SoundManager snd = SoundManager.getInstance();
         snd.loadSoundToSource("grabbable_rebound", "grabbables").play();
 

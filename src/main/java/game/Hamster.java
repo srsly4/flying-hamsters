@@ -4,6 +4,7 @@ import engine.EngineException;
 import engine.render.AnimatedSprite;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
+import engine.sound.SoundManager;
 import game.grabbables.Grabbable;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class Hamster implements IGameObject, ICollidable {
     private final StaticSprite readySprite;
     private final StaticSprite landedSprite;
     private final World world;
+    private final SoundManager sound;
 
     private float width;
     private float height;
@@ -48,6 +50,20 @@ public class Hamster implements IGameObject, ICollidable {
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         state = HamsterState.BeforeLaunch;
+
+        //sounds
+        sound = SoundManager.getInstance();
+        sound.loadSound("hamster_fly", "/sounds/fly.wav");
+        sound.loadSound("hamster_ground", "/sounds/ground.wav");
+        sound.loadSound("hamster_land", "/sounds/land.wav");
+        sound.loadSound("hamster_toss", "/sounds/toss.wav");
+        sound.loadSound("hamster_launched", "/sounds/tossed.wav");
+        sound.loadSound("hamster_launch", "/sounds/launch.wav");
+
+        sound.createSoundSource("hamster_repeat");
+        sound.loadSoundToSource("hamster_fly", "hamster_repeat").setLooping(true);
+
+        sound.createSoundSource("hamster_ground");
     }
 
     @Override
@@ -100,13 +116,22 @@ public class Hamster implements IGameObject, ICollidable {
         this.state = state;
         if (state == HamsterState.BeforeLaunch)
             sprite = this.readySprite;
-        if (state == HamsterState.InAir)
+        if (state == HamsterState.InAir) {
+            sound.loadSoundToSource("hamster_launch", "hamster_ground").play();
             sprite = this.flightSprite;
-        if (state == HamsterState.Launched)
+            sound.loadSoundToSource("hamster_fly", "hamster_repeat").play();
+        }
+        else sound.getSoundSource("hamster_repeat").stop();
+        if (state == HamsterState.Launched){
             sprite = this.tossSprite;
+            sound.loadSoundToSource("hamster_toss", "hamster_ground").play();
+//            sound.loadSoundToSource("hamster_launched", "hamster_repeat").play();
+        }
         if (state == HamsterState.Grounded) {
             sprite = this.landedSprite;
             currentAngle  = 0f;
+
+            sound.loadSoundToSource("hamster_land", "hamster_ground").play();
         }
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
@@ -195,6 +220,7 @@ public class Hamster implements IGameObject, ICollidable {
                     //we have to jump off the ground now
                     yPos += yVel*interval;
                     xPos += xVel*interval;
+                    sound.loadSoundToSource("hamster_ground", "hamster_ground").play();
                 }
                 else {
                     setState(HamsterState.Grounded);

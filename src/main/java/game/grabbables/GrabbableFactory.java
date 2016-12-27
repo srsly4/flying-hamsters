@@ -22,7 +22,10 @@ public class GrabbableFactory {
 
         SoundManager snd = SoundManager.getInstance();
         snd.loadSound("grabbable_rebound", "/sounds/rebound.wav");
+        snd.loadSound("grabbable_rocket", "/sounds/rocket.wav");
+        snd.loadSound("grabbable_wind", "/sounds/wind.wav");
         snd.createSoundSource("grabbables");
+        snd.createSoundSource("grabbables2");
 
     }
 

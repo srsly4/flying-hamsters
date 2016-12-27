@@ -3,6 +3,7 @@ package game.grabbables;
 import engine.Event;
 import engine.EventManager;
 import engine.render.IRenderable;
+import engine.sound.SoundManager;
 import game.Hamster;
 import game.grabbables.Grabbable;
 
@@ -27,6 +28,7 @@ public class WindGrabbable extends Grabbable {
         {
             hamster.setCustomAcceleration(0, boost);
             windActive = true;
+            SoundManager.getInstance().loadSoundToSource("grabbable_wind", "grabbables2").play();
             EventManager.getInstance().addEvent(new Event(duration, ()->{
                 windActive = false;
                 hamster.unsetCustomAcceleration(0, boost);

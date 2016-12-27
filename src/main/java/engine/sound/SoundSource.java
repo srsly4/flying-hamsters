@@ -38,6 +38,7 @@ public class SoundSource {
     public void setBufferSource(SoundBuffer buffer)
     {
         this.buffer = buffer;
+        this.stop();
         alSourcei(sourceId, AL_BUFFER, buffer.getBufferId());
     }
 
