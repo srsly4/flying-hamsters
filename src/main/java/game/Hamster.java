@@ -164,11 +164,11 @@ public class Hamster implements IGameObject, ICollidable {
             else {
                 //standard air/gravity conditions
                 if (this.fly && this.flightStrength > 0f){
-                    yVel += 500f*interval;
+                    yVel += 600f*interval;
                     xVel += 200f*interval;
                 }
                 else {
-                    yVel -= 400f*interval;
+                    yVel -= 600f*interval;
                 }
 
                 //air force
@@ -188,9 +188,9 @@ public class Hamster implements IGameObject, ICollidable {
             //hamster touched the ground
             if (yPos <= groundPos)
             {
-                if (state != HamsterState.Grounded && xVel > 100f && Math.abs(angle) < 60f) //jump off the ground
+                if (state != HamsterState.Grounded && currentSpeed > 100f && Math.abs(angle) < 60f) //jump off the ground
                 {
-                    yVel = -yVel/4f;
+                    yVel = -yVel/3f;
                     xVel = 0.75f*xVel;
                     //we have to jump off the ground now
                     yPos += yVel*interval;

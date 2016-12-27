@@ -11,7 +11,7 @@ import game.grabbables.Grabbable;
  */
 public class WindGrabbable extends Grabbable {
 
-    private final static float boost = 2000f;
+    private final static float boost = 3000f;
     private final static float duration = 0.25f;
     private static boolean windActive = false;
 
