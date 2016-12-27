@@ -10,6 +10,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -26,7 +27,7 @@ public class SoundBuffer {
     private int bufferId;
     public SoundBuffer(String resourceName) throws EngineException{
         try {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(Utils.class.getResourceAsStream(resourceName));
+            AudioInputStream stream = AudioSystem.getAudioInputStream(new BufferedInputStream(Utils.class.getResourceAsStream(resourceName)));
             format = stream.getFormat();
             int alFormat = -1;
             switch(format.getChannels()) {
