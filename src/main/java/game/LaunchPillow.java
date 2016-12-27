@@ -25,6 +25,8 @@ public class LaunchPillow implements IGameObject {
     private final static float pillowY = 450f;
     private final static float launchedPillowX = 0f;
     private final static float launchBoost = 2000f;
+    private final static float maxAbsAngle = (float)Math.sin(Math.toRadians(75));
+
     public LaunchPillow(Hamster hamster) throws EngineException{
         this.hamster = hamster;
         this.pillow = new StaticSprite("/sprites/pillow.xml");
@@ -57,13 +59,14 @@ public class LaunchPillow implements IGameObject {
         if (delta < height && delta > -height)
         {
             //calculate angle from delta
-            float angle = (float)Math.asin(2*delta/height);
+            float angle = (float)Math.asin(Math.min(Math.max(2*delta/height, -maxAbsAngle), maxAbsAngle));
             float velX = launchBoost*(float)Math.cos(angle);
             float velY = launchBoost*(float)Math.sin(angle);
 
             //launch hamster
             hamster.setState(HamsterState.InAir);
             hamster.setVelXY(velX, velY);
+            hamster.setFlightStrength(100f);
         }
 
         EventManager.getInstance().addEvent(new Event(1f, ()->{

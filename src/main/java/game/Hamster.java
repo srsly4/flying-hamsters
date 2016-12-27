@@ -303,4 +303,8 @@ public class Hamster implements IGameObject, ICollidable {
     public float getFlightStrength() {
         return flightStrength;
     }
+
+    public void setFlightStrength(float flightStrength) {
+        this.flightStrength = flightStrength;
+    }
 }
