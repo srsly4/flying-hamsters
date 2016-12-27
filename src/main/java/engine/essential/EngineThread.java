@@ -2,6 +2,7 @@ package engine.essential;
 
 import engine.EngineException;
 import engine.EventManager;
+import engine.sound.SoundManager;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 
@@ -43,12 +44,15 @@ public class EngineThread implements Runnable {
         try {
             init();
             loop();
-            logic.cleanup();
+
         }
         catch (Exception e)
         {
             //wysyp sie: TODO: error handler
             e.printStackTrace();
+        }
+        finally {
+            logic.cleanup();
         }
     }
 
@@ -80,7 +84,7 @@ public class EngineThread implements Runnable {
         }
     }
 
-    protected void init() throws Exception {
+    protected void init() throws EngineException {
         window.init();
         timeManager.init();
         EventManager.initializeInstance(timeManager);
@@ -105,7 +109,7 @@ public class EngineThread implements Runnable {
     private void syncFramerate() {
         float dt = 1.0f / DESIRED_FPS;
         double nextFrameTime = timeManager.getLastTime() + dt;
-        while (timeManager.getTime() < nextFrameTime)
+        while (TimeManager.getTime() < nextFrameTime)
         {
             try {
                 Thread.sleep(1);

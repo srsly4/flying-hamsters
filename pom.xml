@@ -35,8 +35,8 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-stb</artifactId>
-            <version>LATEST</version>
+            <artifactId>lwjgl-openal</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -60,8 +60,8 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-stb</artifactId>
-            <version>LATEST</version>
+            <artifactId>lwjgl-openal</artifactId>
+            <version>3.1.0</version>
             <classifier>natives-windows</classifier>
             <scope>runtime</scope>
         </dependency>

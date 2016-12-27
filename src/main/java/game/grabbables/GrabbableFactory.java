@@ -4,6 +4,7 @@ import engine.EngineException;
 import engine.render.AnimatedSprite;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
+import engine.sound.SoundManager;
 
 import java.util.HashMap;
 
@@ -18,6 +19,11 @@ public class GrabbableFactory {
         renderableInstances.put("rocket", new StaticSprite("/sprites/rocket.xml"));
         renderableInstances.put("wind", new StaticSprite("/sprites/wind.xml"));
         renderableInstances.put("rebound", new AnimatedSprite("/sprites/rebound.xml"));
+
+        SoundManager snd = SoundManager.getInstance();
+        snd.loadSound("grabbable_rebound", "/sounds/rebound.wav");
+        snd.createSoundSource("grabbables");
+
     }
 
     public static Grabbable createRocketGrabbable(float x, float y){

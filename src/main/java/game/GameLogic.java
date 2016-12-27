@@ -3,6 +3,7 @@ package game;
 import engine.EngineException;
 import engine.essential.*;
 import engine.render.*;
+import engine.sound.SoundManager;
 import game.grabbables.GrabbableManager;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
@@ -38,6 +39,8 @@ public class GameLogic implements IEngineLogic {
     public void init(Window window) throws EngineException {
         renderer = new Renderer();
         renderer.init(window);
+        SoundManager.initInstance();
+
         this.window = window;
         window.setClearColor(0.84f, 0.59f, 0.22f, 1.0f);
 
@@ -126,6 +129,8 @@ public class GameLogic implements IEngineLogic {
 
     @Override
     public void cleanup() {
+        //we have to be sure to close al device cause of nazi OpenAL
+        SoundManager.getInstance().cleanUp();
         for (IGameObject obj : gameObjects)
             obj.cleanUp();
     }
