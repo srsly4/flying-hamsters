@@ -17,5 +17,5 @@ public interface IRenderable {
     Vector2f getTextureOrigin();
     boolean isVisible();
     void setVisibility(boolean visibility);
-    default IRenderable clone() throws CloneNotSupportedException { return null; }
+//    default IRenderable clone() throws CloneNotSupportedException { return null; }
 }

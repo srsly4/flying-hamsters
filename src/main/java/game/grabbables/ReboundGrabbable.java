@@ -12,6 +12,9 @@ import game.Hamster;
 public class ReboundGrabbable extends Grabbable {
     public ReboundGrabbable(IRenderable renderableInstance, float xPos, float yPos) {
         super(renderableInstance, xPos, yPos);
+        width /= 1.5f;
+        height /= 2f;
+        this.setPosition(xPos, yPos);
     }
 
     @Override

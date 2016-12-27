@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class GrabbableFactory {
 
-    private static HashMap<String, IRenderable> renderableInstances;
+    private static HashMap<String, StaticSprite> renderableInstances;
     public static void initialize() throws EngineException{
         renderableInstances = new HashMap<>();
         renderableInstances.put("rocket", new StaticSprite("/sprites/rocket.xml"));
@@ -23,7 +23,7 @@ public class GrabbableFactory {
     public static Grabbable createRocketGrabbable(float x, float y){
         try {
             return new RocketGrabbable(
-                    renderableInstances.get("rocket").clone(),
+                    (StaticSprite)(renderableInstances.get("rocket").clone()),
                     x,
                     y
             );
@@ -36,7 +36,7 @@ public class GrabbableFactory {
     public static Grabbable createWindGrabbable(float x, float y){
         try {
             return new WindGrabbable(
-                    renderableInstances.get("wind").clone(),
+                    (StaticSprite)(renderableInstances.get("wind").clone()),
                     x,
                     y
             );
@@ -49,7 +49,7 @@ public class GrabbableFactory {
     public static Grabbable createReboundGrabbable(float x, float y){
         try {
             return new ReboundGrabbable(
-                    renderableInstances.get("rebound").clone(),
+                    (AnimatedSprite)(renderableInstances.get("rebound").clone()),
                     x,
                     y
             );
