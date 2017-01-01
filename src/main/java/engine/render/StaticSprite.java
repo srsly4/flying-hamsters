@@ -198,6 +198,12 @@ public class StaticSprite implements IRenderable, Cloneable {
         this.textureOrigin.x = x;
         this.textureOrigin.y = y;
     }
+
+    @Override
+    public void setDepth(float z) {
+        this.position.z = z;
+    }
+
     public float getSpriteWidth() {
         return spriteWidth;
     }

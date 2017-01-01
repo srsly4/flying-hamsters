@@ -228,6 +228,11 @@ public class TextSprite implements IRenderable {
     }
 
     @Override
+    public void setDepth(float z) {
+        this.position.z = z;
+    }
+
+    @Override
     public IRenderable clone() throws CloneNotSupportedException {
         return (IRenderable) super.clone();
     }

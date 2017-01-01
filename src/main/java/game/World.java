@@ -26,11 +26,13 @@ public class World implements IGameObject {
 
     private World() throws EngineException {
         background = new StaticSprite("/sprites/background.xml");
+        background.setDepth(-0.5f);
 //        movingBackground = new StaticSprite("/sprites/mov_background.xml");
 //        movingBackground.setPosition(0, -0.5f+movingBackground.getSpriteHeight());
 
         grass = new StaticSprite("/sprites/ground.xml");
         grass.setPosition(World.worldCoordsToRender(World.cameraWidth/2.0f, 100f));
+        grass.setDepth(-0.49f);
     }
 
     private static World instance;

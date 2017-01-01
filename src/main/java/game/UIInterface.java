@@ -34,18 +34,23 @@ public class UIInterface implements IGameObject {
         position = new TextSprite(debugFont, window);
         position.setText("xPos: ");
         position.setPosition(-1f, 0.5625f);
+        position.setDepth(0.9f);
 
         velocity = new TextSprite(debugFont, window);
         velocity.setText("xVel: ");
         velocity.setPosition(-1f, 0.53f);
+        velocity.setDepth(0.9f);
 
         version = new TextSprite(debugFont, window);
         version.setText("alpha1");
         version.setPosition(-1f, -0.53f);
+        version.setDepth(0.9f);
 
         strength = new TextSprite(font, window);
         strength.setPosition(0.80f, 0.5625f);
         strength.setText("100%");
+        strength.setDepth(0.9f);
+
     }
 
     @Override

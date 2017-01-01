@@ -130,8 +130,10 @@ public class GameLogic implements IEngineLogic {
     @Override
     public void cleanup() {
         //we have to be sure to close al device cause of nazi OpenAL
-        SoundManager.getInstance().cleanUp();
-        for (IGameObject obj : gameObjects)
-            obj.cleanUp();
+        if (SoundManager.getInstance() != null)
+            SoundManager.getInstance().cleanUp();
+        if (gameObjects != null)
+            for (IGameObject obj : gameObjects)
+                obj.cleanUp();
     }
 }

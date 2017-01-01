@@ -136,6 +136,7 @@ public class Hamster implements IGameObject, ICollidable {
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
+        sprite.setDepth(0.25f);
     }
 
     @Override

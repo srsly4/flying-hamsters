@@ -16,6 +16,7 @@ public class Main {
             engine.start();
         }
         catch (Exception e){
+            System.out.println("A critical error has occured during engine execution. More info in stacktrace.");
             e.printStackTrace();
         }
     }

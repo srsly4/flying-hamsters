@@ -20,6 +20,7 @@ public class HamsterShadow implements IGameObject {
         this.world = World.getInstance();
         this.hamster = hamster;
         shadow = new StaticSprite("/sprites/shadow.xml");
+        shadow.setDepth(-0.1f);
     }
 
     @Override

@@ -30,11 +30,11 @@ public class ShaderProgram {
     }
 
     public int createVertexShader(String name) throws GLException {
-        return createShader(name, GL_VERTEX_SHADER);
+        return vertexShaderId = createShader(name, GL_VERTEX_SHADER);
     }
 
     public int createFragmentShader(String name) throws GLException {
-        return createShader(name, GL_FRAGMENT_SHADER);
+        return fragmentShaderId = createShader(name, GL_FRAGMENT_SHADER);
     }
 
     protected int createShader(String name, int type) throws GLException {
@@ -98,6 +98,10 @@ public class ShaderProgram {
         FloatBuffer buff = BufferUtils.createFloatBuffer(2);
         vec.get(buff);
         glUniform2fv(uniforms.get(name), buff);
+    }
+
+    public void setUniform(String name, float val){
+        glUniform1f(uniforms.get(name), val);
     }
 
     public void setUniform(String name, int val){
