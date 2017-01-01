@@ -19,13 +19,17 @@ public class GrabbableFactory {
         renderableInstances.put("rocket", new StaticSprite("/sprites/rocket.xml"));
         renderableInstances.put("wind", new StaticSprite("/sprites/wind.xml"));
         renderableInstances.put("rebound", new AnimatedSprite("/sprites/rebound.xml"));
+        renderableInstances.put("bounce", new StaticSprite("/sprites/bounce.xml"));
+        renderableInstances.put("super_bounce", new StaticSprite("/sprites/super_bounce.xml"));
 
         SoundManager snd = SoundManager.getInstance();
         snd.loadSound("grabbable_rebound", "/sounds/rebound.wav");
         snd.loadSound("grabbable_rocket", "/sounds/rocket.wav");
         snd.loadSound("grabbable_wind", "/sounds/wind.wav");
+        snd.loadSound("grabbable_bounce", "/sounds/pickup.wav");
         snd.createSoundSource("grabbables");
-        snd.createSoundSource("grabbables2");
+        snd.createSoundSource("grabbables2"); //wind up
+        snd.createSoundSource("grabbables3"); //pickups
 
     }
 
@@ -46,6 +50,30 @@ public class GrabbableFactory {
         try {
             return new WindGrabbable(
                     (StaticSprite)(renderableInstances.get("wind").clone()),
+                    x,
+                    y
+            );
+        }
+        catch (CloneNotSupportedException ce){
+            throw new RuntimeException(ce);
+        }
+    }
+    public static Grabbable createBounceGrabbable(float x, float y){
+        try {
+            return new BounceGrabbable(
+                    (StaticSprite)(renderableInstances.get("bounce").clone()),
+                    x,
+                    y
+            );
+        }
+        catch (CloneNotSupportedException ce){
+            throw new RuntimeException(ce);
+        }
+    }
+    public static Grabbable createSuperBounceGrabbable(float x, float y){
+        try {
+            return new SuperBounceGrabbable(
+                    (StaticSprite)(renderableInstances.get("super_bounce").clone()),
                     x,
                     y
             );
@@ -76,6 +104,10 @@ public class GrabbableFactory {
                 return createWindGrabbable(x, y);
             case "rebound":
                 return createReboundGrabbable(x, y);
+            case "bounce":
+                return createBounceGrabbable(x, y);
+            case "super_bounce":
+                return createSuperBounceGrabbable(x, y);
             default:
                 throw new RuntimeException("Unknown grabbable type");
         }

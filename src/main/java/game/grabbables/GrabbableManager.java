@@ -27,23 +27,32 @@ public class GrabbableManager implements IGameObject {
         world = World.getInstance();
 
         watchers = new LinkedList<>();
-        watchers.add(new GrabbableWatcher("rocket", 2000f, 1500f, 800f));
-        watchers.add(new GrabbableWatcher("rocket", 4250f, 1750f, 1000f));
-        watchers.add(new GrabbableWatcher("rocket", 3100f, 2222f, 1800f));
-        watchers.add(new GrabbableWatcher("rocket", 2050f, 1877f, 2100f));
-        watchers.add(new GrabbableWatcher("rocket", 3777f, 1200f, 3400f));
-        watchers.add(new GrabbableWatcher("rocket", 2496f, 1800f, 3900f));
-        watchers.add(new GrabbableWatcher("wind", 2235f, 3000f, 680f));
-        watchers.add(new GrabbableWatcher("wind", 2100f, 1700f, 1500f));
-        watchers.add(new GrabbableWatcher("wind", 1760f, 1400f, 2800f));
-        watchers.add(new GrabbableWatcher("wind", 3140f, 1200f, 4300f));
-        watchers.add(new GrabbableWatcher("rebound", 3670f, 2000f, Hamster.groundPos));
-        watchers.add(new GrabbableWatcher("rebound", 3120f, 4500f, Hamster.groundPos));
-
+        loadWatchers();
         collidables = new ArrayList<>();
     }
 
+    private void loadWatchers(){
+        watchers.clear();
+        watchers.add(new GrabbableWatcher("rocket", randomInterval(2100, 1000), 1500f, 800f));
+        watchers.add(new GrabbableWatcher("rocket", randomInterval(2200, 2000), 1750f, 1000f));
+        watchers.add(new GrabbableWatcher("rocket", randomInterval(3200, 2000), 2222f, 1800f));
+        watchers.add(new GrabbableWatcher("rocket", randomInterval(2100, 1000), 1877f, 2100f));
+        watchers.add(new GrabbableWatcher("rocket", randomInterval(3200, 2500), 1200f, 3400f));
+        watchers.add(new GrabbableWatcher("rocket", randomInterval(2200, 2000), 1800f, 3900f));
+        watchers.add(new GrabbableWatcher("wind", randomInterval(2100, 1000), 1700f, 1500f));
+        watchers.add(new GrabbableWatcher("wind", randomInterval(2300, 2000), 1400f, 2800f));
+        watchers.add(new GrabbableWatcher("wind", randomInterval(2200, 2000), 1200f, 4300f));
+        watchers.add(new GrabbableWatcher("rebound", randomInterval(3500, 3000), 2000f, Hamster.groundPos));
+        watchers.add(new GrabbableWatcher("rebound", randomInterval(3500, 5000), 4500f, Hamster.groundPos));
+        watchers.add(new GrabbableWatcher("bounce", randomInterval(2500, 2000), 2300f, 1400f));
+        watchers.add(new GrabbableWatcher("bounce", randomInterval(3700, 2000), 1450f, 3100f));
+        watchers.add(new GrabbableWatcher("bounce", randomInterval(2500, 2000), 1650f, 2250f));
+        watchers.add(new GrabbableWatcher("super_bounce", randomInterval(4000, 2000), 3450f, 2600f));
+        watchers.add(new GrabbableWatcher("super_bounce", randomInterval(4000, 2000), 2750f, 3600f));
+    }
+
     public void reset(){
+        loadWatchers();
         for (GrabbableWatcher w : watchers)
             w.reset();
     }
@@ -78,5 +87,9 @@ public class GrabbableManager implements IGameObject {
                 subject.collidedWith(col);
             }
         }
+    }
+
+    private static float randomInterval(float start, float delta){
+        return start + (float)Math.random()*delta;
     }
 }

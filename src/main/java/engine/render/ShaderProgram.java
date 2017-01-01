@@ -3,6 +3,8 @@ package engine.render;
 import engine.GLException;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -98,6 +100,16 @@ public class ShaderProgram {
         FloatBuffer buff = BufferUtils.createFloatBuffer(2);
         vec.get(buff);
         glUniform2fv(uniforms.get(name), buff);
+    }
+    public void setUniform(String name, Vector3f vec){
+        FloatBuffer buff = BufferUtils.createFloatBuffer(3);
+        vec.get(buff);
+        glUniform3fv(uniforms.get(name), buff);
+    }
+    public void setUniform(String name, Vector4f vec){
+        FloatBuffer buff = BufferUtils.createFloatBuffer(4);
+        vec.get(buff);
+        glUniform4fv(uniforms.get(name), buff);
     }
 
     public void setUniform(String name, float val){

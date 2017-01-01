@@ -1,10 +1,8 @@
 package engine.render;
 
 
-import com.sun.prism.ps.ShaderFactory;
 import engine.EngineException;
 import engine.Transformation;
-import engine.Utils;
 import engine.essential.Window;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
@@ -12,7 +10,6 @@ import org.lwjgl.opengl.GL;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import static org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
 
 /**

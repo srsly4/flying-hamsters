@@ -1,11 +1,11 @@
 package game;
 
 import engine.EngineException;
-import engine.render.AnimatedSprite;
-import engine.render.IRenderable;
-import engine.render.StaticSprite;
+import engine.render.*;
 import engine.sound.SoundManager;
 import game.grabbables.Grabbable;
+import game.shaders.GlowShaderFiller;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -27,12 +27,19 @@ public class Hamster implements IGameObject, ICollidable {
     private boolean fly = false;
     private float flightStrength = 100f;
     private HamsterState state;
+    private int bounceState = 0;
 
     private StaticSprite sprite;
     private final AnimatedSprite flightSprite;
     private final StaticSprite tossSprite;
     private final StaticSprite readySprite;
     private final StaticSprite landedSprite;
+    private final GlowShaderFiller glowFiller;
+    private final ShaderProgram glowShader;
+
+    private final Vector3f bounce1GlowColor = new Vector3f(217, 97, 168).div(256f);
+    private final Vector3f bounce2GlowColor = new Vector3f(255, 214, 48).div(256f);
+
     private final World world;
     private final SoundManager sound;
 
@@ -50,7 +57,14 @@ public class Hamster implements IGameObject, ICollidable {
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         state = HamsterState.BeforeLaunch;
+        state = HamsterState.BeforeLaunch;
 
+        //shaders
+        glowFiller = new GlowShaderFiller();
+        glowFiller.setGlowColor(bounce1GlowColor);
+        glowShader = ShaderLoader.getInstance().loadProgram("glow", glowFiller.getCustomUniformNames());
+        sprite.setCustomShader(glowShader);
+        sprite.setShaderFiller(glowFiller);
         //sounds
         sound = SoundManager.getInstance();
         sound.loadSound("hamster_fly", "/sounds/fly.wav");
@@ -59,6 +73,7 @@ public class Hamster implements IGameObject, ICollidable {
         sound.loadSound("hamster_toss", "/sounds/toss.wav");
         sound.loadSound("hamster_launched", "/sounds/tossed.wav");
         sound.loadSound("hamster_launch", "/sounds/launch.wav");
+        sound.loadSound("hamster_bounce", "/sounds/bounce.wav");
 
         sound.createSoundSource("hamster_repeat");
         sound.loadSoundToSource("hamster_fly", "hamster_repeat").setLooping(true);
@@ -182,6 +197,17 @@ public class Hamster implements IGameObject, ICollidable {
         }
         if (this.state == HamsterState.InAir)
         {
+            if (bounceState > 0)
+            {
+                sprite.setCustomShader(glowShader);
+                glowFiller.update(interval);
+                if (bounceState == 1) glowFiller.setGlowColor(bounce1GlowColor);
+                if (bounceState == 2) glowFiller.setGlowColor(bounce2GlowColor);
+            }
+            else {
+                sprite.setCustomShader(null);
+            }
+
             if (this.customAcceleration > 0)
             {
                 xVel += xAcc*interval;
@@ -214,6 +240,21 @@ public class Hamster implements IGameObject, ICollidable {
             //hamster touched the ground
             if (yPos <= groundPos)
             {
+                if (bounceState > 0)
+                {
+                    if (bounceState == 1)
+                        yVel = -yVel;
+                    if (bounceState == 2)
+                    {
+                        yVel *= -2f;
+                        xVel *= 2f;
+                    }
+                    yPos += yVel*interval;
+                    xPos += xVel*interval;
+                    sound.loadSoundToSource("hamster_bounce", "hamster_ground").play();
+                    bounceState = 0;
+                }
+                else
                 if (state != HamsterState.Grounded && currentSpeed > 100f && Math.abs(angle) < 60f) //jump off the ground
                 {
                     yVel = -yVel/3f;
@@ -333,5 +374,13 @@ public class Hamster implements IGameObject, ICollidable {
 
     public void setFlightStrength(float flightStrength) {
         this.flightStrength = flightStrength;
+    }
+
+    public int getBounceState() {
+        return bounceState;
+    }
+
+    public void setBounceState(int bounceState) {
+        this.bounceState = bounceState;
     }
 }

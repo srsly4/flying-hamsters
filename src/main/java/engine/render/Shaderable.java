@@ -7,9 +7,9 @@ import org.joml.Matrix4f;
  */
 public abstract class Shaderable implements IRenderable {
     private ShaderProgram shaderProgram = null;
-
+    protected IShaderFiller shaderFiller = null;
     public boolean hasCustomShader(){
-        return shaderProgram == null;
+        return shaderProgram != null;
     }
     public ShaderProgram getCustomShader(){
         return shaderProgram;
@@ -19,5 +19,17 @@ public abstract class Shaderable implements IRenderable {
         this.shaderProgram = shader;
     }
 
-    public abstract void prepareShaderUniforms(Matrix4f projection, Matrix4f world);
+    public void setShaderFiller(IShaderFiller shaderFiller)
+    {
+        this.shaderFiller = shaderFiller;
+    }
+
+    public void prepareShaderUniforms(Matrix4f projection, Matrix4f world) {
+        shaderProgram.setUniform("projectionMatrix", projection);
+        shaderProgram.setUniform("texture_sampler", 0);
+        shaderProgram.setUniform("texture_origin", getTextureOrigin());
+        shaderProgram.setUniform("worldMatrix", world);
+        if (shaderFiller != null)
+            shaderFiller.fillShader(shaderProgram);
+    }
 }

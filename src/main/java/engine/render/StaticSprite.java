@@ -1,20 +1,12 @@
 package engine.render;
 
 import engine.EngineException;
-import engine.EngineResourceException;
 import engine.ObjectParser;
-import engine.Utils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.*;
-import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.Vector;
 
 import static org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray;
 import static org.lwjgl.opengl.GL11.*;
@@ -28,7 +20,7 @@ import static org.lwjgl.opengl.GL30.*;
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
  */
-public class StaticSprite implements IRenderable, Cloneable {
+public class StaticSprite extends Shaderable implements Cloneable {
     protected Vector3f position;
     protected Vector3f rotation;
     protected float scale;
@@ -210,4 +202,5 @@ public class StaticSprite implements IRenderable, Cloneable {
     public float getSpriteHeight() {
         return spriteHeight;
     }
+
 }
