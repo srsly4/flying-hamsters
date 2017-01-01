@@ -143,7 +143,6 @@ public class StaticSprite implements IRenderable, Cloneable {
 
         // Draw the vertices
         glDrawArrays(GL_TRIANGLES, 0, this.vertexCount);
-//        glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);

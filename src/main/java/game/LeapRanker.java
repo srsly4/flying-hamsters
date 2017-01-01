@@ -30,6 +30,7 @@ public class LeapRanker implements IGameObject {
         fontBuffer = new FontBuffer("/fonts/RifficFree-Bold.ttf", 64, new Vector3f(1f, 1f, 1f));
         groundRank = new TextSprite(fontBuffer, window);
         groundRank.setScale(1f);
+        groundRank.setDepth(0.8f);
         groundRank.setText("0m");
         groundRank.setVisibility(false);
     }

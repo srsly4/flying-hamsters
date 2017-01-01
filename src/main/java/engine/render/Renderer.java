@@ -9,6 +9,9 @@ import engine.essential.Window;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import static org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -18,6 +21,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Renderer {
     private final Transformation transformation;
     private ShaderProgram defaultProgram;
+    private Queue<Shaderable> shaderables;
     public Renderer() throws EngineException {
         transformation = new Transformation();
     }
@@ -30,6 +34,8 @@ public class Renderer {
 
         defaultProgram = ShaderLoader.getInstance().loadProgram("default",
                 new String[]{"projectionMatrix", "worldMatrix", "texture_sampler", "texture_origin"});
+
+        shaderables = new LinkedList<>();
 
     }
 
@@ -45,6 +51,10 @@ public class Renderer {
         for (IRenderable item : items)
         {
             if(!item.isVisible()) continue;
+            if (item instanceof Shaderable && ((Shaderable)item).hasCustomShader()){
+                shaderables.add((Shaderable)item);
+                continue;
+            }
             defaultProgram.setUniform("texture_origin", item.getTextureOrigin());
             Matrix4f worldMatrix = transformation.getWorldMatrix(
                     item.getPosition(),
@@ -54,6 +64,25 @@ public class Renderer {
             item.render();
         }
         defaultProgram.unbind();
+
+        //render custom-shadered objects
+        ShaderProgram shdProg = null;
+        while (!shaderables.isEmpty()){
+            Shaderable shdObj = shaderables.poll();
+            if (shdProg != shdObj.getCustomShader())
+            {
+                if (shdProg != null) shdProg.unbind();
+                shdProg = shdObj.getCustomShader();
+                shdProg.bind();
+            }
+            Matrix4f worldMatrix = transformation.getWorldMatrix(
+                    shdObj.getPosition(),
+                    shdObj.getRotation(),
+                    shdObj.getScale());
+            shdObj.prepareShaderUniforms(projectionMatrix, worldMatrix);
+
+            shdObj.render();
+        }
     }
 
     public void cleanup(){
