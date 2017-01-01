@@ -220,7 +220,7 @@ public class Hamster implements IGameObject, ICollidable {
                     xVel += 200f*interval;
                 }
                 else {
-                    yVel -= 600f*interval;
+                    yVel -= (600f + yVel/20f)*interval;
                 }
 
                 //air force
