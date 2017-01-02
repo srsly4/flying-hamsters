@@ -47,7 +47,7 @@ public class Hamster implements IGameObject, ICollidable {
     private float height;
 
     public static final float groundPos = 100f;
-    public static float flightAcceleration = 1500f;
+    public static float flightAcceleration = 2000f;
     public Hamster() throws EngineException {
         sprite = flightSprite = new AnimatedSprite("/sprites/hamster.xml");
         tossSprite = new StaticSprite("/sprites/hamster_toss.xml");

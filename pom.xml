@@ -6,7 +6,7 @@
 
     <groupId>org.fham</groupId>
     <artifactId>flyinghamster</artifactId>
-    <version>alpha1</version>
+    <version>alpha2</version>
     <dependencies>
         <dependency>
             <groupId>org.lwjgl</groupId>

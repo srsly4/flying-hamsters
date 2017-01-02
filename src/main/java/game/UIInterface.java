@@ -42,7 +42,7 @@ public class UIInterface implements IGameObject {
         velocity.setDepth(0.9f);
 
         version = new TextSprite(debugFont, window);
-        version.setText("alpha1");
+        version.setText("alpha2");
         version.setPosition(-1f, -0.53f);
         version.setDepth(0.9f);
 
