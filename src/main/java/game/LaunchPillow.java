@@ -22,9 +22,9 @@ public class LaunchPillow implements IGameObject {
     private float height;
 
     private final static float pillowX = -150f;
-    private final static float pillowY = 450f;
+    private final static float pillowY = 550f;
     private final static float launchedPillowX = 0f;
-    private final static float launchBoost = 2000f;
+    private final static float launchBoost = 2500f;
     private final static float maxAbsAngle = (float)Math.sin(Math.toRadians(75));
 
     public LaunchPillow(Hamster hamster) throws EngineException{
@@ -50,7 +50,7 @@ public class LaunchPillow implements IGameObject {
 
     public void toss(){
         hamster.setState(HamsterState.Launched);
-        hamster.setVelXY(0, 1000f);
+        hamster.setVelXY(0, 1100f);
     }
 
     public void launch(){

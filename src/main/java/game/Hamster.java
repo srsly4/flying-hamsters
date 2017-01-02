@@ -47,7 +47,7 @@ public class Hamster implements IGameObject, ICollidable {
     private float height;
 
     public static final float groundPos = 100f;
-    public static float maxYVel = 500f;
+    public static float flightAcceleration = 1500f;
     public Hamster() throws EngineException {
         sprite = flightSprite = new AnimatedSprite("/sprites/hamster.xml");
         tossSprite = new StaticSprite("/sprites/hamster_toss.xml");
@@ -216,12 +216,13 @@ public class Hamster implements IGameObject, ICollidable {
             else {
                 //standard air/gravity conditions
                 if (this.fly && this.flightStrength > 0f){
-                    yVel += 600f*interval;
-                    xVel += 200f*interval;
+                    float flightForceAngle = currentAngle + 60f;
+                    flightForceAngle = Math.min(90f, flightForceAngle);
+                    flightForceAngle = Math.max(-90f, flightForceAngle);
+                    yVel += Math.sin(Math.toRadians(flightForceAngle))*interval*flightAcceleration;
+                    xVel += Math.cos(Math.toRadians(flightForceAngle))*interval*flightAcceleration;
                 }
-                else {
-                    yVel -= (600f + yVel/20f)*interval;
-                }
+                yVel -= (600f + yVel/20f)*interval;
 
                 //air force
                 if (xVel <= 0.0f)
