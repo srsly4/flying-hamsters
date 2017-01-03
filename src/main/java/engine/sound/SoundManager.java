@@ -23,31 +23,36 @@ public class SoundManager {
     private long device;
     private HashMap<String, SoundBuffer> sounds;
     private HashMap<String, SoundSource> sources;
+    private boolean disabled = false;
 
-    private SoundManager() throws ALException{
-        device = alcOpenDevice((ByteBuffer)null); //load default sound device
-        ALCCapabilities alcCaps = ALC.createCapabilities(device);
+    private SoundManager() throws ALException {
+        try {
+            device = alcOpenDevice((ByteBuffer) null); //load default sound device
+            ALCCapabilities alcCaps = ALC.createCapabilities(device);
 
-        //alc attributes
-        IntBuffer contextAttribList = BufferUtils.createIntBuffer(16);
-        contextAttribList.put(ALC_REFRESH);
-        contextAttribList.put(60);
-        contextAttribList.put(ALC_SYNC);
-        contextAttribList.put(ALC_FALSE);
-        contextAttribList.put(ALC_MAX_AUXILIARY_SENDS);
-        contextAttribList.put(2);
-        contextAttribList.put(0);
-        contextAttribList.flip();
+            //alc attributes
+            IntBuffer contextAttribList = BufferUtils.createIntBuffer(16);
+            contextAttribList.put(ALC_REFRESH);
+            contextAttribList.put(60);
+            contextAttribList.put(ALC_SYNC);
+            contextAttribList.put(ALC_FALSE);
+            contextAttribList.put(ALC_MAX_AUXILIARY_SENDS);
+            contextAttribList.put(2);
+            contextAttribList.put(0);
+            contextAttribList.flip();
 
-        long context = alcCreateContext(device ,contextAttribList);
-        if(!alcMakeContextCurrent(context)) {
-            throw new ALException("Failed to make ALC context current", "alcCreateContext");
+            long context = alcCreateContext(device, contextAttribList);
+            if (!alcMakeContextCurrent(context)) {
+                throw new ALException("Failed to make ALC context current", "alcCreateContext");
+            }
+            ALCapabilities alCaps = AL.createCapabilities(alcCaps);
+
+            alListener3f(AL_VELOCITY, 0f, 0f, 0f);
+            alListener3f(AL_ORIENTATION, 0f, 0f, -1f);
         }
-        ALCapabilities alCaps = AL.createCapabilities(alcCaps);
-
-        alListener3f(AL_VELOCITY, 0f, 0f, 0f);
-        alListener3f(AL_ORIENTATION, 0f, 0f, -1f);
-
+        catch (IllegalStateException ise){
+            throw (ALException)(new ALException("Illegal state exception occured during initializing audio", "alcOpenDevice").initCause(ise));
+        }
         sounds = new HashMap<>();
         sources = new HashMap<>();
     }
@@ -78,6 +83,7 @@ public class SoundManager {
     }
 
     public void cleanUp(){
+        if (SoundManager.getInstance().isDisabled()) return;
         for (String sourceKey : sources.keySet())
             sources.get(sourceKey).cleanUp();
         for (String soundKey : sounds.keySet())
@@ -93,4 +99,10 @@ public class SoundManager {
     public static SoundManager getInstance(){
         return instance;
     }
+
+    public void disableAudio(){
+        this.disabled = true;
+    }
+
+    public boolean isDisabled() { return disabled; }
 }

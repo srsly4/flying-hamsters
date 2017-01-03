@@ -3,6 +3,7 @@ package game;
 import engine.EngineException;
 import engine.essential.*;
 import engine.render.*;
+import engine.sound.ALException;
 import engine.sound.SoundManager;
 import game.grabbables.GrabbableManager;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -39,8 +40,13 @@ public class GameLogic implements IEngineLogic {
     public void init(Window window) throws EngineException {
         renderer = new Renderer();
         renderer.init(window);
-        SoundManager.initInstance();
-
+        try {
+            SoundManager.initInstance();
+        }
+        catch (ALException ale){
+            System.err.println("Audio error: " + ale.toString());
+            SoundManager.getInstance().disableAudio();
+        }
         this.window = window;
         window.setClearColor(0.84f, 0.59f, 0.22f, 1.0f);
 

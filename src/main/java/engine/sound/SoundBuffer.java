@@ -26,6 +26,7 @@ public class SoundBuffer {
     private long length;
     private int bufferId;
     public SoundBuffer(String resourceName) throws EngineException{
+        if (SoundManager.getInstance().isDisabled()) return;
         try {
             AudioInputStream stream = AudioSystem.getAudioInputStream(new BufferedInputStream(Utils.class.getResourceAsStream(resourceName)));
             format = stream.getFormat();
@@ -77,6 +78,7 @@ public class SoundBuffer {
     }
 
     public void cleanUp(){
+        if (SoundManager.getInstance().isDisabled()) return;
         alDeleteBuffers(bufferId);
     }
 
