@@ -36,8 +36,10 @@ public class LeapRanker implements IGameObject {
     }
 
     public void showResult(){
-        groundRank.setText(String.format("%.2fm",
-                hamster.getxPos()/(hamster.getWorldWidth()/hamsterLengthMeters) ));
+        groundRank.setText(String.format("%.2fm, %.1fm/s",
+                hamster.getxPos()/(hamster.getWorldWidth()/hamsterLengthMeters),
+                hamster.getImpactVelocity()/(hamster.getWorldWidth()/hamsterLengthMeters)
+                ));
         groundRank.setPosition(
                 world.xPositionToRender(hamster.getxPos() + 100f),
                 world.yPositionToRender(Hamster.groundPos+0.5f*hamster.getWorldHeight()));

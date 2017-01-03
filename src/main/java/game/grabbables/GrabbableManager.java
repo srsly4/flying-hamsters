@@ -49,6 +49,10 @@ public class GrabbableManager implements IGameObject {
         watchers.add(new GrabbableWatcher("bounce", randomInterval(2500, 2000), 1650f, 2250f));
         watchers.add(new GrabbableWatcher("super_bounce", randomInterval(4000, 2000), 3450f, 2600f));
         watchers.add(new GrabbableWatcher("super_bounce", randomInterval(4000, 2000), 2750f, 3600f));
+
+        watchers.add(new GrabbableWatcher("cloud", randomInterval(2000, 750), 1000, 5600f));
+        watchers.add(new GrabbableWatcher("cloud", randomInterval(2300, 1000), 1340, 6000f));
+        watchers.add(new GrabbableWatcher("cloud", randomInterval(2700, 1000), 640, 5750f));
     }
 
     public void reset(){

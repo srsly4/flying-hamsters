@@ -28,6 +28,7 @@ public class Hamster implements IGameObject, ICollidable {
     private float flightStrength = 100f;
     private HamsterState state;
     private int bounceState = 0;
+    private float impactVelocity = 0f;
 
     private StaticSprite sprite;
     private final AnimatedSprite flightSprite;
@@ -256,7 +257,7 @@ public class Hamster implements IGameObject, ICollidable {
                     bounceState = 0;
                 }
                 else
-                if (state != HamsterState.Grounded && currentSpeed > 100f && Math.abs(angle) < 60f) //jump off the ground
+                if (state != HamsterState.Grounded && currentSpeed > 75f && Math.abs(currentAngle) < 60f) //jump off the ground
                 {
                     yVel = -yVel/3f;
                     xVel = 0.75f*xVel;
@@ -270,6 +271,7 @@ public class Hamster implements IGameObject, ICollidable {
                     yPos = groundPos;
                     yVel = 0;
                     xVel = 0;
+                    impactVelocity = currentSpeed;
                 }
             }
             //rotate with proper direction
@@ -375,6 +377,10 @@ public class Hamster implements IGameObject, ICollidable {
 
     public void setFlightStrength(float flightStrength) {
         this.flightStrength = flightStrength;
+    }
+
+    public float getImpactVelocity() {
+        return impactVelocity;
     }
 
     public int getBounceState() {

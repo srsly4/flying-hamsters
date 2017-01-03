@@ -21,12 +21,14 @@ public class GrabbableFactory {
         renderableInstances.put("rebound", new AnimatedSprite("/sprites/rebound.xml"));
         renderableInstances.put("bounce", new StaticSprite("/sprites/bounce.xml"));
         renderableInstances.put("super_bounce", new StaticSprite("/sprites/super_bounce.xml"));
+        renderableInstances.put("cloud", new StaticSprite("/sprites/cloud.xml"));
 
         SoundManager snd = SoundManager.getInstance();
         snd.loadSound("grabbable_rebound", "/sounds/rebound.wav");
         snd.loadSound("grabbable_rocket", "/sounds/rocket.wav");
         snd.loadSound("grabbable_wind", "/sounds/wind.wav");
         snd.loadSound("grabbable_bounce", "/sounds/pickup.wav");
+        snd.loadSound("grabbable_cloud", "/sounds/cloud.wav");
         snd.createSoundSource("grabbables");
         snd.createSoundSource("grabbables2"); //wind up
         snd.createSoundSource("grabbables3"); //pickups
@@ -50,6 +52,18 @@ public class GrabbableFactory {
         try {
             return new WindGrabbable(
                     (StaticSprite)(renderableInstances.get("wind").clone()),
+                    x,
+                    y
+            );
+        }
+        catch (CloneNotSupportedException ce){
+            throw new RuntimeException(ce);
+        }
+    }
+    public static Grabbable createCloudGrabbable(float x, float y){
+        try {
+            return new CloudGrabbable(
+                    (StaticSprite)(renderableInstances.get("cloud").clone()),
                     x,
                     y
             );
@@ -108,6 +122,8 @@ public class GrabbableFactory {
                 return createBounceGrabbable(x, y);
             case "super_bounce":
                 return createSuperBounceGrabbable(x, y);
+            case "cloud":
+                return createCloudGrabbable(x, y);
             default:
                 throw new RuntimeException("Unknown grabbable type");
         }

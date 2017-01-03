@@ -203,4 +203,6 @@ public class StaticSprite extends Shaderable implements Cloneable {
         return spriteHeight;
     }
 
+    public float getX(){ return position.x; }
+    public float getY(){ return position.y; }
 }
