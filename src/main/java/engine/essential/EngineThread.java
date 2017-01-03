@@ -89,6 +89,8 @@ public class EngineThread implements Runnable {
         timeManager.init();
         EventManager.initializeInstance(timeManager);
         logic.init(window);
+        window.update();
+        logic.load(window);
     }
 
     protected void input(){

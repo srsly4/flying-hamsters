@@ -52,6 +52,10 @@ public class GameLogic implements IEngineLogic {
             }
         });
 
+    }
+
+    @Override
+    public void load(Window window) throws EngineException {
         //initialize game objects
         renderables = new ArrayList<>();
         ((ArrayList)renderables).ensureCapacity(256);

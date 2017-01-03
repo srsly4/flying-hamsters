@@ -13,6 +13,13 @@ public interface IEngineLogic {
     void init(Window window) throws EngineException;
 
     /**
+     * Loads all game objects
+     * @param window
+     * @throws EngineException
+     */
+    default void load(Window window) throws EngineException { }
+
+    /**
      * Should be implemented with continous input control functions
      * Function is called before update, render with standard UPS
      * @param window A Window object with render context
