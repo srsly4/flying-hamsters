@@ -7,6 +7,7 @@ public enum HamsterState {
     BeforeLaunch,
     Launched,
     InAir,
-    Grounded
+    Grounded,
+    Ranked
 
 }

@@ -29,22 +29,25 @@ public class UIInterface implements IGameObject {
         this.world = World.getInstance();
         this.window = window;
 
-        font = new FontBuffer("/fonts/RifficFree-Bold.ttf", 48, new Vector3f(1f, 1f, 1f));
-        FontBuffer debugFont = new FontBuffer("/fonts/RifficFree-Bold.ttf", 24, new Vector3f(1f, 1f, 1f));
+        font = new FontBuffer("/fonts/RifficFree-Bold.ttf", 48);
+        FontBuffer debugFont = new FontBuffer("/fonts/RifficFree-Bold.ttf", 24);
         position = new TextSprite(debugFont, window);
         position.setText("xPos: ");
         position.setPosition(-1f, 0.5625f);
         position.setDepth(0.9f);
+        position.setColor(0.95f, 0.95f, 0.95f, 0.75f);
 
         velocity = new TextSprite(debugFont, window);
         velocity.setText("xVel: ");
         velocity.setPosition(-1f, 0.53f);
         velocity.setDepth(0.9f);
+        velocity.setColor(0.95f, 0.95f, 0.95f, 0.75f);
 
         version = new TextSprite(debugFont, window);
         version.setText("alpha2");
         version.setPosition(-1f, -0.53f);
         version.setDepth(0.9f);
+        version.setColor(0.95f, 0.95f, 0.95f, 0.75f);
 
         strength = new TextSprite(font, window);
         strength.setPosition(0.80f, 0.5625f);

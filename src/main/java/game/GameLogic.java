@@ -1,6 +1,8 @@
 package game;
 
 import engine.EngineException;
+import engine.Event;
+import engine.EventManager;
 import engine.essential.*;
 import engine.render.*;
 import engine.sound.ALException;
@@ -103,7 +105,7 @@ public class GameLogic implements IEngineLogic {
                 && action == GLFW_PRESS)
             pillow.toss();
 
-        if (hamster.getState() == HamsterState.Grounded
+        if (hamster.getState() == HamsterState.Ranked
                 && key == GLFW_KEY_SPACE
                 && action == GLFW_PRESS)
         {

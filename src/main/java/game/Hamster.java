@@ -29,6 +29,8 @@ public class Hamster implements IGameObject, ICollidable {
     private HamsterState state;
     private int bounceState = 0;
     private float impactVelocity = 0f;
+    private float maxYPos = 6000f;
+    private float lastYPos = 0f;
 
     private StaticSprite sprite;
     private final AnimatedSprite flightSprite;
@@ -149,6 +151,10 @@ public class Hamster implements IGameObject, ICollidable {
 
             sound.loadSoundToSource("hamster_land", "hamster_ground").play();
         }
+        if (state == HamsterState.Ranked){
+            sprite = this.readySprite;
+            sprite.setRotation(0);
+        }
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
@@ -262,6 +268,7 @@ public class Hamster implements IGameObject, ICollidable {
                     yVel = -yVel/3f;
                     xVel = 0.75f*xVel;
                     //we have to jump off the ground now
+                    yPos = groundPos;
                     yPos += yVel*interval;
                     xPos += xVel*interval;
                     sound.loadSoundToSource("hamster_ground", "hamster_ground").play();
@@ -278,6 +285,8 @@ public class Hamster implements IGameObject, ICollidable {
             sprite.setRotation(currentAngle);
 
         }
+
+        lastYPos = yPos;
 
         //camera
         if (yPos < 0.5f*World.cameraHeight){
@@ -390,4 +399,5 @@ public class Hamster implements IGameObject, ICollidable {
     public void setBounceState(int bounceState) {
         this.bounceState = bounceState;
     }
+
 }

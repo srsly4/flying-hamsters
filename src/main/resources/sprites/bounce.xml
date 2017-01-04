@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <sprite>
     <texture>/textures/bounce.png</texture>
-    <width>0.06</width>
-    <height>0.06</height>
+    <width>0.03</width>
+    <height>0.03</height>
     <textureWidth>256</textureWidth>
     <textureHeight>256</textureHeight>
     <textureRepeatX>1</textureRepeatX>
