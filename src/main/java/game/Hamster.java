@@ -400,4 +400,7 @@ public class Hamster implements IGameObject, ICollidable {
         this.bounceState = bounceState;
     }
 
+    public float getCurrentSpeed() {
+        return currentSpeed;
+    }
 }

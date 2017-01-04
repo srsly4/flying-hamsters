@@ -22,7 +22,7 @@ public class LeapRanker implements IGameObject {
     private final Hamster hamster;
     private final World world;
 
-    private final float hamsterLengthMeters = 0.1f;
+    public static final float hamsterLengthMeters = 0.1f;
     private final float rankedStartHeight = 6000f;
     private boolean resultCalculated = false;
 
