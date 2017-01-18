@@ -3,8 +3,8 @@ Simple recreation of the old flash game "The Flight of the Hamsters". Project us
 
 ### How to download dependencies and build an executable? ###
 
-* `maven install`
-* `maven clean compile assembly:single`
+* `mvn install`
+* `mvn clean compile assembly:single`
 
 ### How to play? ###
 
