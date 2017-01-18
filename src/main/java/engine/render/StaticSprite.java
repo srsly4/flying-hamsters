@@ -1,20 +1,12 @@
 package engine.render;
 
 import engine.EngineException;
-import engine.EngineResourceException;
 import engine.ObjectParser;
-import engine.Utils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.*;
-import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.Vector;
 
 import static org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray;
 import static org.lwjgl.opengl.GL11.*;
@@ -28,11 +20,11 @@ import static org.lwjgl.opengl.GL30.*;
 /**
  * Created by Szymon Piechaczek on 19.12.2016.
  */
-public class StaticSprite implements IRenderable, Cloneable {
-    protected final Vector3f position;
-    protected final Vector3f rotation;
+public class StaticSprite extends Shaderable implements Cloneable {
+    protected Vector3f position;
+    protected Vector3f rotation;
     protected float scale;
-    protected final Vector2f textureOrigin;
+    protected Vector2f textureOrigin;
     protected float spriteWidth;
     protected float spriteHeight;
     protected boolean visibility = true;
@@ -123,16 +115,12 @@ public class StaticSprite implements IRenderable, Cloneable {
 
 
     @Override
-    public StaticSprite clone() throws CloneNotSupportedException {
-        super.clone();
-        StaticSprite cln = new StaticSprite();
-        cln.vaoId = vaoId;
-        cln.texture = texture;
-        cln.vboId = vboId;
-        cln.texVboId = texVboId;
-        cln.vertexCount = vertexCount;
-        cln.spriteHeight = spriteHeight;
-        cln.spriteWidth = spriteWidth;
+    public Object clone() throws CloneNotSupportedException {
+        StaticSprite cln = (StaticSprite)super.clone();
+        cln.position = new Vector3f(0, 0, 0);
+        cln.rotation = new Vector3f(0, 0, 0);
+        cln.scale = 1f;
+        cln.textureOrigin = new Vector2f(0, 0);
         return cln;
     }
 
@@ -147,7 +135,6 @@ public class StaticSprite implements IRenderable, Cloneable {
 
         // Draw the vertices
         glDrawArrays(GL_TRIANGLES, 0, this.vertexCount);
-//        glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
@@ -202,6 +189,12 @@ public class StaticSprite implements IRenderable, Cloneable {
         this.textureOrigin.x = x;
         this.textureOrigin.y = y;
     }
+
+    @Override
+    public void setDepth(float z) {
+        this.position.z = z;
+    }
+
     public float getSpriteWidth() {
         return spriteWidth;
     }
@@ -209,4 +202,7 @@ public class StaticSprite implements IRenderable, Cloneable {
     public float getSpriteHeight() {
         return spriteHeight;
     }
+
+    public float getX(){ return position.x; }
+    public float getY(){ return position.y; }
 }

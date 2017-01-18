@@ -62,6 +62,11 @@ public class AnimatedSprite extends StaticSprite {
         setTextureOrigin((float)currentFrame*frameWidth, 0f);
     }
 
+    public void setFrame(int frame){
+        currentFrame = Math.min(frame, frames-1);
+        setTextureOrigin((float)currentFrame*frameWidth, 0f);
+    }
+
     public int getFrames() {
         return frames;
     }
@@ -73,5 +78,10 @@ public class AnimatedSprite extends StaticSprite {
     public void setFps(float fps) {
         this.fps = fps;
         this.period = 1f/fps;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

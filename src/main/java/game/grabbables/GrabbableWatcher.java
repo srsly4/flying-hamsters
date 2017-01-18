@@ -1,8 +1,10 @@
-package game;
+package game.grabbables;
 
 import engine.EngineException;
 import engine.render.IRenderable;
 import engine.render.StaticSprite;
+import game.ICollidable;
+import game.World;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -23,7 +25,7 @@ public class GrabbableWatcher {
 
     private StaticSprite marker;
 
-    public GrabbableWatcher(String grabbableType, float xPosModulo, float xPosStart, float yPos) throws EngineException
+    public GrabbableWatcher(String grabbableType, float xPosModulo, float xPosStart, float yPos)
     {
         world = World.getInstance();
         series = new LinkedList<>();
@@ -33,8 +35,6 @@ public class GrabbableWatcher {
         this.yPos = yPos;
 
         nextX = xPosStart;
-
-//        marker = new StaticSprite("/sprites/marker.xml");
 
     }
 

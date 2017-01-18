@@ -3,71 +3,87 @@ package engine.render;
 
 import engine.EngineException;
 import engine.Transformation;
-import engine.Utils;
 import engine.essential.Window;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 
-import java.nio.FloatBuffer;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import static org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray;
-import static org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 /**
  * Created by Szymon Piechaczek on 18.12.2016.
  */
 public class Renderer {
     private final Transformation transformation;
-    private final ShaderProgram sProgram;
+    private ShaderProgram defaultProgram;
+    private Queue<Shaderable> shaderables;
     public Renderer() throws EngineException {
         transformation = new Transformation();
-        sProgram = new ShaderProgram();
     }
 
     public void init(Window window) throws EngineException {
         GL.createCapabilities();
         glEnable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_ALPHA_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        sProgram.createVertexShader(Utils.loadResource("/vertex.glsl"));
-        sProgram.createFragmentShader(Utils.loadResource("/simple_color.glsl"));
-        sProgram.link();
+        defaultProgram = ShaderLoader.getInstance().loadProgram("default",
+                new String[]{"projectionMatrix", "worldMatrix", "texture_sampler", "texture_origin"});
 
-        sProgram.createUniform("projectionMatrix");
-        sProgram.createUniform("worldMatrix");
-        sProgram.createUniform("texture_sampler");
-        sProgram.createUniform("texturePosition");
+        shaderables = new LinkedList<>();
+
     }
 
     public void render(IRenderable[] items, Window window)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        sProgram.bind();
+        //at first, render all standard-texturized objects
+        defaultProgram.bind();
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(window.getWidth(), window.getHeight());
-        sProgram.setUniform("projectionMatrix", projectionMatrix);
-        sProgram.setUniform("texture_sampler", 0);
+        defaultProgram.setUniform("projectionMatrix", projectionMatrix);
+        defaultProgram.setUniform("texture_sampler", 0);
         for (IRenderable item : items)
         {
             if(!item.isVisible()) continue;
-            sProgram.setUniform("texturePosition", item.getTextureOrigin());
+            if (item instanceof Shaderable && ((Shaderable)item).hasCustomShader()){
+                shaderables.add((Shaderable)item);
+                continue;
+            }
+            defaultProgram.setUniform("texture_origin", item.getTextureOrigin());
             Matrix4f worldMatrix = transformation.getWorldMatrix(
                     item.getPosition(),
                     item.getRotation(),
                     item.getScale());
-            sProgram.setUniform("worldMatrix", worldMatrix);
+            defaultProgram.setUniform("worldMatrix", worldMatrix);
             item.render();
         }
-        sProgram.unbind();
+        defaultProgram.unbind();
+
+        //render custom-shadered objects
+        ShaderProgram shdProg = null;
+        while (!shaderables.isEmpty()){
+            Shaderable shdObj = shaderables.poll();
+            if (shdProg != shdObj.getCustomShader())
+            {
+                if (shdProg != null) shdProg.unbind();
+                shdProg = shdObj.getCustomShader();
+                shdProg.bind();
+            }
+            Matrix4f worldMatrix = transformation.getWorldMatrix(
+                    shdObj.getPosition(),
+                    shdObj.getRotation(),
+                    shdObj.getScale());
+            shdObj.prepareShaderUniforms(projectionMatrix, worldMatrix);
+
+            shdObj.render();
+        }
     }
 
     public void cleanup(){
-        sProgram.cleanup();
+        defaultProgram.cleanup();
     }
 }

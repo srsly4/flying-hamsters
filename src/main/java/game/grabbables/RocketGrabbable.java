@@ -1,15 +1,18 @@
-package game;
+package game.grabbables;
 
 import engine.Event;
 import engine.EventManager;
 import engine.render.IRenderable;
+import engine.sound.SoundManager;
+import game.Hamster;
+import game.grabbables.Grabbable;
 
 /**
  * Created by Sirius on 24.12.2016.
  */
 public class RocketGrabbable extends Grabbable {
 
-    private final static float boost = 2500f;
+    private final static float boost = 5000f;
     private final static float xRelative = 1.25f;
     private final static float duration = 0.25f;
     public RocketGrabbable(IRenderable renderableInstance, float xPos, float yPos) {
@@ -18,7 +21,9 @@ public class RocketGrabbable extends Grabbable {
 
     @Override
     public void executeOn(Hamster hamster) {
-
+        if (isUsed) return;
+        SoundManager snd = SoundManager.getInstance();
+        snd.loadSoundToSource("grabbable_rocket", "grabbables").play();
         float angle = (float)Math.atan2(hamster.getyVel(), hamster.getxVel());
         float dx = xRelative*boost*(float)Math.cos(angle);
         float dy = boost*(float)Math.sin(angle);

@@ -1,20 +1,25 @@
-package game;
+package game.grabbables;
 
 import engine.Event;
 import engine.EventManager;
 import engine.render.IRenderable;
+import engine.sound.SoundManager;
+import game.Hamster;
+import game.grabbables.Grabbable;
 
 /**
  * Created by Sirius on 25.12.2016.
  */
 public class WindGrabbable extends Grabbable {
 
-    private final static float boost = 2000f;
+    private final static float boost = 3000f;
     private final static float duration = 0.25f;
     private static boolean windActive = false;
 
     public WindGrabbable(IRenderable renderableInstance, float xPos, float yPos) {
         super(renderableInstance, xPos, yPos);
+        this.height *= 3f;
+        this.setPosition(xPos, yPos);
     }
 
     @Override
@@ -23,6 +28,7 @@ public class WindGrabbable extends Grabbable {
         {
             hamster.setCustomAcceleration(0, boost);
             windActive = true;
+            SoundManager.getInstance().loadSoundToSource("grabbable_wind", "grabbables2").play();
             EventManager.getInstance().addEvent(new Event(duration, ()->{
                 windActive = false;
                 hamster.unsetCustomAcceleration(0, boost);

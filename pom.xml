@@ -6,7 +6,7 @@
 
     <groupId>org.fham</groupId>
     <artifactId>flyinghamster</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>alpha2</version>
     <dependencies>
         <dependency>
             <groupId>org.lwjgl</groupId>
@@ -35,8 +35,8 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-stb</artifactId>
-            <version>LATEST</version>
+            <artifactId>lwjgl-openal</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -60,8 +60,8 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-stb</artifactId>
-            <version>LATEST</version>
+            <artifactId>lwjgl-openal</artifactId>
+            <version>3.1.0</version>
             <classifier>natives-windows</classifier>
             <scope>runtime</scope>
         </dependency>
@@ -85,6 +85,32 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>0.0.7</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>game.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<sprite>
+    <texture>/textures/hamster_toss.png</texture>
+    <width>0.03197</width>
+    <height>0.033</height>
+    <textureWidth>124</textureWidth>
+    <textureHeight>128</textureHeight>
+    <textureRepeatX>1</textureRepeatX>
+    <textureRepeatY>1</textureRepeatY>
+</sprite>

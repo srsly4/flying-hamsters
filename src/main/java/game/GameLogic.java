@@ -5,11 +5,12 @@ import engine.Event;
 import engine.EventManager;
 import engine.essential.*;
 import engine.render.*;
-import org.joml.Vector3f;
+import engine.sound.ALException;
+import engine.sound.SoundManager;
+import game.grabbables.GrabbableManager;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -41,6 +42,13 @@ public class GameLogic implements IEngineLogic {
     public void init(Window window) throws EngineException {
         renderer = new Renderer();
         renderer.init(window);
+        try {
+            SoundManager.initInstance();
+        }
+        catch (ALException ale){
+            System.err.println("Audio error: " + ale.toString());
+            SoundManager.getInstance().disableAudio();
+        }
         this.window = window;
         window.setClearColor(0.84f, 0.59f, 0.22f, 1.0f);
 
@@ -52,6 +60,10 @@ public class GameLogic implements IEngineLogic {
             }
         });
 
+    }
+
+    @Override
+    public void load(Window window) throws EngineException {
         //initialize game objects
         renderables = new ArrayList<>();
         ((ArrayList)renderables).ensureCapacity(256);
@@ -93,7 +105,7 @@ public class GameLogic implements IEngineLogic {
                 && action == GLFW_PRESS)
             pillow.toss();
 
-        if (hamster.getState() == HamsterState.Grounded
+        if (hamster.getState() == HamsterState.Ranked
                 && key == GLFW_KEY_SPACE
                 && action == GLFW_PRESS)
         {
@@ -129,7 +141,11 @@ public class GameLogic implements IEngineLogic {
 
     @Override
     public void cleanup() {
-        for (IGameObject obj : gameObjects)
-            obj.cleanUp();
+        //we have to be sure to close al device cause of nazi OpenAL
+        if (SoundManager.getInstance() != null)
+            SoundManager.getInstance().cleanUp();
+        if (gameObjects != null)
+            for (IGameObject obj : gameObjects)
+                obj.cleanUp();
     }
 }

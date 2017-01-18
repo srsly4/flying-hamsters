@@ -1,6 +1,5 @@
 package engine.render;
 
-import com.sun.xml.internal.ws.api.pipe.Engine;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import engine.EngineException;
 
