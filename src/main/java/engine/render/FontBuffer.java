@@ -33,7 +33,7 @@ public class FontBuffer {
     private HashMap<Character, CharInfo> charMap;
     private int width;
     private int height;
-    public FontBuffer(String fileName, int size, Vector3f color) throws EngineException{
+    public FontBuffer(String fileName, int size) throws EngineException{
         try {
             charMap = new HashMap<>();
 
@@ -65,7 +65,7 @@ public class FontBuffer {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setFont(fnt);
             fm = g2d.getFontMetrics();
-            g2d.setColor(new Color(color.x, color.y, color.z));
+            g2d.setColor(new Color(1f, 1f, 1f));
             g2d.drawString(chars, 0, fm.getAscent());
             g2d.dispose();
 

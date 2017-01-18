@@ -58,10 +58,10 @@ public abstract class Grabbable implements IGameObject, ICollidable {
 
     public void setMarkers(final StaticSprite pattern){
         try {
-            tlMarker = pattern.clone();
-            trMarker = pattern.clone();
-            blMarker = pattern.clone();
-            brMarker = pattern.clone();
+            tlMarker = (StaticSprite) pattern.clone();
+            trMarker = (StaticSprite) pattern.clone();
+            blMarker = (StaticSprite) pattern.clone();
+            brMarker = (StaticSprite) pattern.clone();
             markerOn = true;
         }
         catch (CloneNotSupportedException e)

@@ -1,10 +1,11 @@
 package game;
 
 import engine.EngineException;
-import engine.render.AnimatedSprite;
-import engine.render.IRenderable;
-import engine.render.StaticSprite;
+import engine.render.*;
+import engine.sound.SoundManager;
 import game.grabbables.Grabbable;
+import game.shaders.GlowShaderFiller;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -26,19 +27,30 @@ public class Hamster implements IGameObject, ICollidable {
     private boolean fly = false;
     private float flightStrength = 100f;
     private HamsterState state;
+    private int bounceState = 0;
+    private float impactVelocity = 0f;
+    private float maxYPos = 6000f;
+    private float lastYPos = 0f;
 
     private StaticSprite sprite;
     private final AnimatedSprite flightSprite;
     private final StaticSprite tossSprite;
     private final StaticSprite readySprite;
     private final StaticSprite landedSprite;
+    private final GlowShaderFiller glowFiller;
+    private final ShaderProgram glowShader;
+
+    private final Vector3f bounce1GlowColor = new Vector3f(217, 97, 168).div(256f);
+    private final Vector3f bounce2GlowColor = new Vector3f(255, 214, 48).div(256f);
+
     private final World world;
+    private final SoundManager sound;
 
     private float width;
     private float height;
 
     public static final float groundPos = 100f;
-    public static float maxYVel = 500f;
+    public static float flightAcceleration = 2000f;
     public Hamster() throws EngineException {
         sprite = flightSprite = new AnimatedSprite("/sprites/hamster.xml");
         tossSprite = new StaticSprite("/sprites/hamster_toss.xml");
@@ -48,6 +60,28 @@ public class Hamster implements IGameObject, ICollidable {
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         state = HamsterState.BeforeLaunch;
+        state = HamsterState.BeforeLaunch;
+
+        //shaders
+        glowFiller = new GlowShaderFiller();
+        glowFiller.setGlowColor(bounce1GlowColor);
+        glowShader = ShaderLoader.getInstance().loadProgram("glow", glowFiller.getCustomUniformNames());
+        sprite.setCustomShader(glowShader);
+        sprite.setShaderFiller(glowFiller);
+        //sounds
+        sound = SoundManager.getInstance();
+        sound.loadSound("hamster_fly", "/sounds/fly.wav");
+        sound.loadSound("hamster_ground", "/sounds/ground.wav");
+        sound.loadSound("hamster_land", "/sounds/land.wav");
+        sound.loadSound("hamster_toss", "/sounds/toss.wav");
+        sound.loadSound("hamster_launched", "/sounds/tossed.wav");
+        sound.loadSound("hamster_launch", "/sounds/launch.wav");
+        sound.loadSound("hamster_bounce", "/sounds/bounce.wav");
+
+        sound.createSoundSource("hamster_repeat");
+        sound.loadSoundToSource("hamster_fly", "hamster_repeat").setLooping(true);
+
+        sound.createSoundSource("hamster_ground");
     }
 
     @Override
@@ -100,17 +134,31 @@ public class Hamster implements IGameObject, ICollidable {
         this.state = state;
         if (state == HamsterState.BeforeLaunch)
             sprite = this.readySprite;
-        if (state == HamsterState.InAir)
+        if (state == HamsterState.InAir) {
+            sound.loadSoundToSource("hamster_launch", "hamster_ground").play();
             sprite = this.flightSprite;
-        if (state == HamsterState.Launched)
+            sound.loadSoundToSource("hamster_fly", "hamster_repeat").play();
+        }
+        else sound.getSoundSource("hamster_repeat").stop();
+        if (state == HamsterState.Launched){
             sprite = this.tossSprite;
+            sound.loadSoundToSource("hamster_toss", "hamster_ground").play();
+//            sound.loadSoundToSource("hamster_launched", "hamster_repeat").play();
+        }
         if (state == HamsterState.Grounded) {
             sprite = this.landedSprite;
             currentAngle  = 0f;
+
+            sound.loadSoundToSource("hamster_land", "hamster_ground").play();
+        }
+        if (state == HamsterState.Ranked){
+            sprite = this.readySprite;
+            sprite.setRotation(0);
         }
         width = World.renderWidthToWorld(sprite.getSpriteWidth());
         height = World.renderHeightToWorld(sprite.getSpriteHeight());
         sprite.setPosition(world.xPositionToRender(xPos), World.worldYCoordToRender(realYPos));
+        sprite.setDepth(0.25f);
     }
 
     @Override
@@ -156,6 +204,17 @@ public class Hamster implements IGameObject, ICollidable {
         }
         if (this.state == HamsterState.InAir)
         {
+            if (bounceState > 0)
+            {
+                sprite.setCustomShader(glowShader);
+                glowFiller.update(interval);
+                if (bounceState == 1) glowFiller.setGlowColor(bounce1GlowColor);
+                if (bounceState == 2) glowFiller.setGlowColor(bounce2GlowColor);
+            }
+            else {
+                sprite.setCustomShader(null);
+            }
+
             if (this.customAcceleration > 0)
             {
                 xVel += xAcc*interval;
@@ -164,12 +223,13 @@ public class Hamster implements IGameObject, ICollidable {
             else {
                 //standard air/gravity conditions
                 if (this.fly && this.flightStrength > 0f){
-                    yVel += 500f*interval;
-                    xVel += 200f*interval;
+                    float flightForceAngle = currentAngle + 60f;
+                    flightForceAngle = Math.min(90f, flightForceAngle);
+                    flightForceAngle = Math.max(-90f, flightForceAngle);
+                    yVel += Math.sin(Math.toRadians(flightForceAngle))*interval*flightAcceleration;
+                    xVel += Math.cos(Math.toRadians(flightForceAngle))*interval*flightAcceleration;
                 }
-                else {
-                    yVel -= 400f*interval;
-                }
+                yVel -= (600f + yVel/20f)*interval;
 
                 //air force
                 if (xVel <= 0.0f)
@@ -188,25 +248,45 @@ public class Hamster implements IGameObject, ICollidable {
             //hamster touched the ground
             if (yPos <= groundPos)
             {
-                if (state != HamsterState.Grounded && xVel > 100f && Math.abs(angle) < 60f) //jump off the ground
+                if (bounceState > 0)
                 {
-                    yVel = -yVel/4f;
-                    xVel = 0.75f*xVel;
-                    //we have to jump off the ground now
+                    if (bounceState == 1)
+                        yVel = -yVel;
+                    if (bounceState == 2)
+                    {
+                        yVel *= -2f;
+                        xVel *= 2f;
+                    }
                     yPos += yVel*interval;
                     xPos += xVel*interval;
+                    sound.loadSoundToSource("hamster_bounce", "hamster_ground").play();
+                    bounceState = 0;
+                }
+                else
+                if (state != HamsterState.Grounded && currentSpeed > 75f && Math.abs(currentAngle) < 60f) //jump off the ground
+                {
+                    yVel = -yVel/3f;
+                    xVel = 0.75f*xVel;
+                    //we have to jump off the ground now
+                    yPos = groundPos;
+                    yPos += yVel*interval;
+                    xPos += xVel*interval;
+                    sound.loadSoundToSource("hamster_ground", "hamster_ground").play();
                 }
                 else {
                     setState(HamsterState.Grounded);
                     yPos = groundPos;
                     yVel = 0;
                     xVel = 0;
+                    impactVelocity = currentSpeed;
                 }
             }
             //rotate with proper direction
             sprite.setRotation(currentAngle);
 
         }
+
+        lastYPos = yPos;
 
         //camera
         if (yPos < 0.5f*World.cameraHeight){
@@ -302,5 +382,25 @@ public class Hamster implements IGameObject, ICollidable {
 
     public float getFlightStrength() {
         return flightStrength;
+    }
+
+    public void setFlightStrength(float flightStrength) {
+        this.flightStrength = flightStrength;
+    }
+
+    public float getImpactVelocity() {
+        return impactVelocity;
+    }
+
+    public int getBounceState() {
+        return bounceState;
+    }
+
+    public void setBounceState(int bounceState) {
+        this.bounceState = bounceState;
+    }
+
+    public float getCurrentSpeed() {
+        return currentSpeed;
     }
 }

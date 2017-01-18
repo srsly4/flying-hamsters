@@ -1,11 +1,11 @@
 package engine.render;
 
+import engine.EngineException;
 import engine.essential.Window;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.stb.STBTTAlignedQuad;
-import org.lwjgl.stb.STBTTBakedChar;
 
 import static org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
@@ -20,7 +20,6 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.stb.STBTruetype.*;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.Buffer;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  * Created by Sirius on 22.12.2016.
  */
-public class TextSprite implements IRenderable {
+public class TextSprite extends Shaderable {
 
     private final Vector3f rotation;
     private final Vector3f position;
@@ -48,14 +47,26 @@ public class TextSprite implements IRenderable {
     private int vboId;
     private int texVboId;
     private int vertexCount;
+    private float textWidth = 0f;
 
-    public TextSprite(FontBuffer font, Window window){
+    private final TextShaderFiller shaderFiller;
+    private final ShaderProgram shader;
+    public TextSprite(FontBuffer font, Window window) throws EngineException {
         this.font = font;
         this.position = new Vector3f(0, 0,0);
         this.rotation = new Vector3f(0, 0,0);
         this.textureOrigin = new Vector2f(0, 0);
         this.scale = 1f;
         this.window = window;
+
+        shaderFiller = new TextShaderFiller();
+        this.setShaderFiller(shaderFiller);
+        shader = ShaderLoader.getInstance().loadProgram("font", shaderFiller.getCustomUniformNames());
+        this.setCustomShader(shader);
+    }
+
+    public void setColor(float r, float g, float b, float a){
+        this.shaderFiller.setColors(r, g, b, a);
     }
 
     public void setText(String text)
@@ -69,8 +80,10 @@ public class TextSprite implements IRenderable {
     private void freeTextMeshMemory(){
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
         glDeleteBuffers(vboId);
         glDeleteBuffers(texVboId);
+
         glBindVertexArray(0);
         glDeleteVertexArrays(vaoId);
     }
@@ -136,7 +149,7 @@ public class TextSprite implements IRenderable {
             posX += charWidth;
 
         }
-
+        textWidth = posX;
         this.vertexCount = vertexes.size();
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertexes.size());
         for (Float f : vertexes)
@@ -231,11 +244,20 @@ public class TextSprite implements IRenderable {
     }
 
     @Override
+    public void setDepth(float z) {
+        this.position.z = z;
+    }
+
+    @Override
     public IRenderable clone() throws CloneNotSupportedException {
         return (IRenderable) super.clone();
     }
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public float getTextWidth() {
+        return textWidth;
     }
 }

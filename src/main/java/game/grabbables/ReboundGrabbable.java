@@ -4,6 +4,7 @@ import engine.Event;
 import engine.EventManager;
 import engine.render.AnimatedSprite;
 import engine.render.IRenderable;
+import engine.sound.SoundManager;
 import game.Hamster;
 
 /**
@@ -12,6 +13,9 @@ import game.Hamster;
 public class ReboundGrabbable extends Grabbable {
     public ReboundGrabbable(IRenderable renderableInstance, float xPos, float yPos) {
         super(renderableInstance, xPos, yPos);
+        width /= 1.5f;
+        height /= 2f;
+        this.setPosition(xPos, yPos);
     }
 
     @Override
@@ -19,6 +23,10 @@ public class ReboundGrabbable extends Grabbable {
         if (isUsed) return;
         isUsed = true;
         hamster.setVelXY(hamster.getxVel() + 1000f, Math.abs(hamster.getyVel())+500f);
+
+        SoundManager snd = SoundManager.getInstance();
+        snd.loadSoundToSource("grabbable_rebound", "grabbables").play();
+
         if (renderable instanceof AnimatedSprite)
         {
             AnimatedSprite spr = (AnimatedSprite)renderable;

@@ -7,10 +7,10 @@ out vec2 outTexCoord;
 
 uniform mat4 worldMatrix;
 uniform mat4 projectionMatrix;
-uniform vec2 texturePosition;
+uniform vec2 texture_origin;
 
 void main()
 {
     gl_Position = projectionMatrix * worldMatrix * vec4(position, 1.0);
-    outTexCoord = texCoord + texturePosition;
+    outTexCoord = texCoord + texture_origin;
 }
